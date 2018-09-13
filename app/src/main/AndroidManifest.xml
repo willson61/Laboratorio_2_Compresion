@@ -17,7 +17,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".DecompressHuff1" />
-        <activity android:name=".CompressHuff1"></activity>
+        <activity android:name=".CompressHuff1" />
+        <activity android:name=".CompressHuffResult"></activity>
     </application>
 
 </manifest>

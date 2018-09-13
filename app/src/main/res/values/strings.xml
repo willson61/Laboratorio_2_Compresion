@@ -2,4 +2,7 @@
     <string name="app_name">Laboratorio_2_Compresion</string>
     <string name="compresion_huffman">Compresion Huff</string>
     <string name="descompresion_huffman">Descompresion Huff</string>
+    <string name="buscar">Buscar</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="comprimir">Comprimir</string>
 </resources>

@@ -16,7 +16,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
         android:background="@color/colorPrimary"
-        android:text="Buscar" />
+        android:text="@string/buscar" />
 
     <Button
         android:id="@+id/btnCancelar"
@@ -27,14 +27,33 @@
         android:layout_alignTop="@+id/btnBuscar"
         android:layout_marginEnd="20dp"
         android:background="@color/colorPrimary"
-        android:text="Cancelar" />
+        android:text="@string/cancelar" />
 
     <TextView
-        android:id="@+id/labelPrueba"
+        android:id="@+id/labelNombre"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/btnBuscar"
-        android:layout_marginTop="85dp"
-        android:text="TextView" />
+        android:layout_marginTop="85dp" />
+
+    <TextView
+        android:id="@+id/labelContenido"
+        android:layout_width="347dp"
+        android:layout_height="315dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/btnBuscar"
+        android:layout_marginTop="116dp"
+        android:scrollbars="vertical" />
+
+    <Button
+        android:id="@+id/btnComprimir"
+        style="@android:style/Widget.Button"
+        android:layout_width="125dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/btnBuscar"
+        android:layout_marginBottom="20dp"
+        android:background="@color/colorPrimary"
+        android:text="@string/comprimir" />
 </RelativeLayout>

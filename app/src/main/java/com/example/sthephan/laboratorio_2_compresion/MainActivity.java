@@ -1,5 +1,7 @@
 package com.example.sthephan.laboratorio_2_compresion;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -29,14 +31,22 @@ public class MainActivity extends AppCompatActivity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.opCompresionHuff:
+                finish();
                 startActivity(new Intent(MainActivity.this, CompressHuff1.class));
                 return true;
             case R.id.opDescompresionHuff:
+                finish();
                 startActivity(new Intent(MainActivity.this, DecompressHuff1.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        System.exit(0);
     }
 
 }
