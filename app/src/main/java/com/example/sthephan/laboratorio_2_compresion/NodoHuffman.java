@@ -31,4 +31,13 @@ public class NodoHuffman {
     public void setCodigo(String codigo){
         this.codigo = codigo;
     }
+
+    public static boolean esHoja(NodoHuffman aux){
+        if (aux.hijoDerecho == null && aux.hijoIzquierdo == null){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
 }
