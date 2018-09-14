@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class ArbolHuffman {
     public static NodoHuffman nodoRaiz;
+    //public static NodoHuffman nodoAux;
 
     public static void armarArbol(ArrayList<NodoHuffman> lista) {
         ordenamientoAsc(lista);
@@ -20,6 +21,8 @@ public class ArbolHuffman {
             lista.add(auxiliar);
             if (lista.size() == 1){
                 nodoRaiz = auxiliar;
+                nodoRaiz.nodoPadre = null;
+                //nodoAux = nodoRaiz;
                 completo = false;
             }else {
                 ordenamientoAsc(lista);
@@ -46,7 +49,39 @@ public class ArbolHuffman {
         }
     }
 
-    public static void inOrden (){
-        
+    public static NodoHuffman getArbolI(NodoHuffman nodo){
+        if (nodo.getHijoIzquierdo() == null){
+            return null;
+        }
+        else{
+            return nodo.getHijoIzquierdo();
+        }
+    }
+
+    public static NodoHuffman getArbolD(NodoHuffman nodo){
+        if (nodo.getHijoDerecho() == null){
+            return null;
+        }
+        else{
+            return nodo.getHijoDerecho();
+        }
+    }
+
+    public static void inOrden (NodoHuffman nodo){
+        //NodoHuffman aux = nodo;
+        if(!esHoja(nodo)){
+            inOrden(getArbolI(nodo));
+            //llega a la raíz
+            inOrden(getArbolD(nodo));
+        }
+    }
+
+    public static boolean esHoja(NodoHuffman aux){
+        if (aux.hijoDerecho == null && aux.hijoIzquierdo == null){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 }

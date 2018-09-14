@@ -32,12 +32,36 @@ public class NodoHuffman {
         this.codigo = codigo;
     }
 
-    public static boolean esHoja(NodoHuffman aux){
+    public NodoHuffman getHijoIzquierdo() {
+        return hijoIzquierdo;
+    }
+
+    public void setHijoIzquierdo(NodoHuffman hijoIzquierdo) {
+        this.hijoIzquierdo = hijoIzquierdo;
+    }
+
+    public NodoHuffman getHijoDerecho() {
+        return hijoDerecho;
+    }
+
+    public void setHijoDerecho(NodoHuffman hijoDerecho) {
+        this.hijoDerecho = hijoDerecho;
+    }
+
+    public NodoHuffman getNodoPadre() {
+        return nodoPadre;
+    }
+
+    public void setNodoPadre(NodoHuffman nodoPadre) {
+        this.nodoPadre = nodoPadre;
+    }
+
+    /*public static boolean esHoja(NodoHuffman aux){
         if (aux.hijoDerecho == null && aux.hijoIzquierdo == null){
             return true;
         }
         else{
             return false;
         }
-    }
+    }*/
 }
