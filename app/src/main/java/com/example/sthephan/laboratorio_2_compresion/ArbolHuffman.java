@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class ArbolHuffman {
     public static NodoHuffman nodoRaiz;
     //public static NodoHuffman nodoAux;
+    public static String Num = "";
 
     public static void armarArbol(ArrayList<NodoHuffman> lista) {
         ordenamientoAsc(lista);
@@ -58,6 +59,18 @@ public class ArbolHuffman {
         }
     }
 
+    public static NodoHuffman getArbolIC(NodoHuffman nodo, String s){
+        if (nodo.getHijoIzquierdo() == null){
+            nodo.setCodigo(s);
+            s.replace(s, s.substring(0, s.length() - 1));
+            return null;
+        }
+        else{
+            s += "0";
+            return nodo.getHijoIzquierdo();
+        }
+    }
+
     public static NodoHuffman getArbolD(NodoHuffman nodo){
         if (nodo.getHijoDerecho() == null){
             return null;
@@ -67,11 +80,32 @@ public class ArbolHuffman {
         }
     }
 
+    public static NodoHuffman getArbolDC(NodoHuffman nodo, String s){
+        if (nodo.getHijoDerecho() == null){
+            s.replace(s, s.substring(0, s.length() - 1));
+            return null;
+        }
+        else{
+            s += "1";
+            return nodo.getHijoDerecho();
+        }
+    }
+
+    public static void inOrdenC (NodoHuffman nodo, String s){
+        //NodoHuffman aux = nodo;
+        if(!esHoja(nodo)){
+            inOrden(getArbolIC(nodo, s));
+            s.replace(s, s.substring(0, s.length() - 1));
+            inOrden(getArbolDC(nodo, s));
+            s.replace(s, s.substring(0, s.length() - 1));
+        }
+    }
+
     public static void inOrden (NodoHuffman nodo){
         //NodoHuffman aux = nodo;
         if(!esHoja(nodo)){
             inOrden(getArbolI(nodo));
-            //llega a la raíz
+
             inOrden(getArbolD(nodo));
         }
     }
