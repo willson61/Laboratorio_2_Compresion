@@ -18,7 +18,8 @@
         </activity>
         <activity android:name=".DecompressHuff1" />
         <activity android:name=".CompressHuff1" />
-        <activity android:name=".CompressHuffResult"></activity>
+        <activity android:name=".CompressHuffResult" />
+        <activity android:name=".DecompressHuffResult"></activity>
     </application>
 
 </manifest>

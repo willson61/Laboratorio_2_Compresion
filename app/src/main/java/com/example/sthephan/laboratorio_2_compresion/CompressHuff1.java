@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -26,6 +27,8 @@ public class CompressHuff1 extends AppCompatActivity {
     TextView labelNombre;
     @BindView(R.id.labelContenido)
     TextView labelContenido;
+
+    public static Uri file;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +54,7 @@ public class CompressHuff1 extends AppCompatActivity {
                 startActivity(new Intent(CompressHuff1.this, CompressHuffResult.class));*/
                 labelNombre.setText(null);
                 labelContenido.setText(null);
+                CompressHuff1.file = null;
                 break;
             case R.id.btnComprimir:
                 break;
@@ -61,16 +65,29 @@ public class CompressHuff1 extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 123 && resultCode == RESULT_OK) {
-            Uri selectedFile = data.getData();
-            String[] prueba = selectedFile.getPath().split("/");
-            labelNombre.setText(prueba[prueba.length - 1]);
             try{
-                labelContenido.setText(readTextFromUri(selectedFile));
+                Uri selectedFile = data.getData();
+                String[] prueba = selectedFile.getPath().split("/");
+                if(prueba[prueba.length - 1].contains(".txt")){
+                    Toast message = Toast.makeText(getApplicationContext(), "Archivo seleccionado exitosamente", Toast.LENGTH_LONG);
+                    message.show();
+                    labelNombre.setText(prueba[prueba.length - 1]);
+                    labelContenido.setText(readTextFromUri(selectedFile));
+                    CompressHuff1.file = selectedFile;
+                }
+                else{
+                    labelNombre.setText(null);
+                    labelContenido.setText(null);
+                    CompressHuff1.file = null;
+                    Toast message = Toast.makeText(getApplicationContext(), "El archivo seleccionado no posee la extension .txt para compresion. Por favor seleccione un archivo de extension .txt", Toast.LENGTH_LONG);
+                    message.show();
+                }
             }catch(Exception e){
                 e.printStackTrace();
             }
         } else if (resultCode == RESULT_CANCELED) {
-
+            Toast message = Toast.makeText(getApplicationContext(), "Por favor seleccione un archivo para continuar con la compresion", Toast.LENGTH_LONG);
+            message.show();
         }
     }
 

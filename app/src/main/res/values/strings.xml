@@ -5,4 +5,7 @@
     <string name="buscar">Buscar</string>
     <string name="cancelar">Cancelar</string>
     <string name="comprimir">Comprimir</string>
+    <string name="descomprimir">Descomprimir</string>
+    <string name="guardar">Guardar</string>
+    <string name="borrar">Borrar</string>
 </resources>

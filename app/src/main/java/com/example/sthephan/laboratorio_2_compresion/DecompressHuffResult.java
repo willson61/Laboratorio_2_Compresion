@@ -13,7 +13,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class CompressHuffResult extends AppCompatActivity {
+public class DecompressHuffResult extends AppCompatActivity {
 
     @BindView(R.id.labelNombre)
     TextView labelNombre;
@@ -23,9 +23,19 @@ public class CompressHuffResult extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_compress_huff_result);
+        setContentView(R.layout.activity_decompress_huff_result);
         ButterKnife.bind(this);
         labelContenido.setMovementMethod(new ScrollingMovementMethod());
+    }
+
+    @OnClick({R.id.btnGuardar, R.id.btnBorrar})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.btnGuardar:
+                break;
+            case R.id.btnBorrar:
+                break;
+        }
     }
 
     @Override
@@ -38,18 +48,8 @@ public class CompressHuffResult extends AppCompatActivity {
 
                     public void onClick(DialogInterface arg0, int arg1) {
                         finish();
-                        startActivity(new Intent(CompressHuffResult.this, MainActivity.class));
+                        startActivity(new Intent(DecompressHuffResult.this, MainActivity.class));
                     }
                 }).create().show();
-    }
-
-    @OnClick({R.id.btnGuardar, R.id.btnBorrar})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.btnGuardar:
-                break;
-            case R.id.btnBorrar:
-                break;
-        }
     }
 }
