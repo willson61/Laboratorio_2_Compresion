@@ -15,6 +15,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.LinkedList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,6 +30,8 @@ public class CompressHuff1 extends AppCompatActivity {
     TextView labelContenido;
 
     public static Uri file;
+    public static LinkedList<Character> ListaCaracteres = new LinkedList<>();
+    public static LinkedList<NodoHuffman> ListaNodos = new LinkedList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +60,12 @@ public class CompressHuff1 extends AppCompatActivity {
                 CompressHuff1.file = null;
                 break;
             case R.id.btnComprimir:
+                try{
+                    generarProbabilidades(CompressHuff1.file);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+                pruebaProbabilidades();
                 break;
         }
     }
@@ -119,4 +128,40 @@ public class CompressHuff1 extends AppCompatActivity {
         return stringbuilder.toString();
     }
 
+    private void generarProbabilidades(Uri uri) throws IOException{
+        String texto = readTextFromUri(uri);
+        char[] txt = texto.toCharArray();
+        for(int i = 0; i < txt.length; i++){
+            if(!ListaCaracteres.contains(txt[i])){
+                double cantCar = contarCaracteres(txt[i], txt);
+                double prob = cantCar/(double)txt.length;
+                NodoHuffman nodo = new NodoHuffman();
+                nodo.setCaracter(txt[i]);
+                nodo.setProbabilidad(prob);
+                ListaCaracteres.add(txt[i]);
+                ListaNodos.add(nodo);
+            }
+            else{
+                continue;
+            }
+        }
+    }
+
+    private int contarCaracteres(char c, char[] text){
+        int cont = 0;
+        for(int i = 0; i < text.length; i++){
+            if(c == text[i]){
+                cont++;
+            }
+        }
+        return cont;
+    }
+
+    public void pruebaProbabilidades(){
+        String st = "";
+        for(int i = 0; i < ListaNodos.size(); i++){
+            st = st.concat(ListaNodos.get(i).getCaracter() + " = " + Double.toString(ListaNodos.get(i).getProbabilidad()) + "\n");
+        }
+        labelContenido.setText(st);
+    }
 }
