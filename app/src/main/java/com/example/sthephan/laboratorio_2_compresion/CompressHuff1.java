@@ -58,14 +58,23 @@ public class CompressHuff1 extends AppCompatActivity {
                 labelNombre.setText(null);
                 labelContenido.setText(null);
                 CompressHuff1.file = null;
+                CompressHuff1.ListaCaracteres = new LinkedList<>();
+                CompressHuff1.ListaNodos = new LinkedList<>();
                 break;
             case R.id.btnComprimir:
                 try{
-                    generarProbabilidades(CompressHuff1.file);
+                    if((CompressHuff1.ListaNodos.size() == 0) && (CompressHuff1.ListaCaracteres.size() == 0)){
+                        generarProbabilidades(CompressHuff1.file);
+                    }
+                    else{
+                        CompressHuff1.ListaCaracteres = new LinkedList<>();
+                        CompressHuff1.ListaNodos = new LinkedList<>();
+                        generarProbabilidades(CompressHuff1.file);
+                    }
                 }catch (Exception e){
                     e.printStackTrace();
                 }
-                pruebaProbabilidades();
+                labelContenido.setText(pruebaProbabilidades());
                 break;
         }
     }
@@ -97,6 +106,9 @@ public class CompressHuff1 extends AppCompatActivity {
         } else if (resultCode == RESULT_CANCELED) {
             Toast message = Toast.makeText(getApplicationContext(), "Por favor seleccione un archivo para continuar con la compresion", Toast.LENGTH_LONG);
             message.show();
+            labelNombre.setText(null);
+            labelContenido.setText(null);
+            CompressHuff1.file = null;
         }
     }
 
@@ -128,40 +140,39 @@ public class CompressHuff1 extends AppCompatActivity {
         return stringbuilder.toString();
     }
 
-    private void generarProbabilidades(Uri uri) throws IOException{
-        String texto = readTextFromUri(uri);
-        char[] txt = texto.toCharArray();
-        for(int i = 0; i < txt.length; i++){
-            if(!ListaCaracteres.contains(txt[i])){
-                double cantCar = contarCaracteres(txt[i], txt);
-                double prob = cantCar/(double)txt.length;
-                NodoHuffman nodo = new NodoHuffman();
-                nodo.setCaracter(txt[i]);
-                nodo.setProbabilidad(prob);
-                ListaCaracteres.add(txt[i]);
-                ListaNodos.add(nodo);
-            }
-            else{
-                continue;
+        private void generarProbabilidades(Uri uri) throws IOException {
+            String texto = readTextFromUri(uri);
+            char[] txt = texto.toCharArray();
+            for (int i = 0; i < txt.length; i++) {
+                if (!CompressHuff1.ListaCaracteres.contains(txt[i])) {
+                    double cantCar = contarCaracteres(txt[i], txt);
+                    double prob = cantCar / (double) txt.length;
+                    NodoHuffman nodo = new NodoHuffman();
+                    nodo.setCaracter(txt[i]);
+                    nodo.setProbabilidad(prob);
+                    CompressHuff1.ListaCaracteres.add(txt[i]);
+                    CompressHuff1.ListaNodos.add(nodo);
+                } else {
+                    continue;
+                }
             }
         }
-    }
 
-    private int contarCaracteres(char c, char[] text){
-        int cont = 0;
-        for(int i = 0; i < text.length; i++){
-            if(c == text[i]){
-                cont++;
+        private int contarCaracteres ( char c, char[] text){
+            int cont = 0;
+            for (int i = 0; i < text.length; i++) {
+                if (c == text[i]) {
+                    cont++;
+                }
             }
+            return cont;
         }
-        return cont;
-    }
 
-    public void pruebaProbabilidades(){
-        String st = "";
-        for(int i = 0; i < ListaNodos.size(); i++){
-            st = st.concat(ListaNodos.get(i).getCaracter() + " = " + Double.toString(ListaNodos.get(i).getProbabilidad()) + "\n");
+        public String pruebaProbabilidades () {
+            String st = "";
+            for (int i = 0; i < CompressHuff1.ListaNodos.size(); i++) {
+                st = st.concat(CompressHuff1.ListaNodos.get(i).getCaracter() + " = " + Double.toString(CompressHuff1.ListaNodos.get(i).getProbabilidad()) + "\n");
+            }
+            return st;
         }
-        labelContenido.setText(st);
-    }
 }
