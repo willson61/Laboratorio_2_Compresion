@@ -15,6 +15,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import butterknife.BindView;
@@ -30,8 +31,8 @@ public class CompressHuff1 extends AppCompatActivity {
     TextView labelContenido;
 
     public static Uri file;
-    public static LinkedList<Character> ListaCaracteres = new LinkedList<>();
-    public static LinkedList<NodoHuffman> ListaNodos = new LinkedList<>();
+    public static ArrayList<Character> ListaCaracteres = new ArrayList<>();
+    public static ArrayList<NodoHuffman> ListaNodos = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +59,8 @@ public class CompressHuff1 extends AppCompatActivity {
                 labelNombre.setText(null);
                 labelContenido.setText(null);
                 CompressHuff1.file = null;
-                CompressHuff1.ListaCaracteres = new LinkedList<>();
-                CompressHuff1.ListaNodos = new LinkedList<>();
+                CompressHuff1.ListaCaracteres = new ArrayList<>();
+                CompressHuff1.ListaNodos = new ArrayList<>();
                 break;
             case R.id.btnComprimir:
                 try{
@@ -67,8 +68,8 @@ public class CompressHuff1 extends AppCompatActivity {
                         generarProbabilidades(CompressHuff1.file);
                     }
                     else{
-                        CompressHuff1.ListaCaracteres = new LinkedList<>();
-                        CompressHuff1.ListaNodos = new LinkedList<>();
+                        CompressHuff1.ListaCaracteres = new ArrayList<>();
+                        CompressHuff1.ListaNodos = new ArrayList<>();
                         generarProbabilidades(CompressHuff1.file);
                     }
                 }catch (Exception e){
