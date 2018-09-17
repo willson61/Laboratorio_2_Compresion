@@ -62,7 +62,7 @@ public class ArbolHuffman {
     public static NodoHuffman getArbolIC(NodoHuffman nodo, String s){
         if (nodo.getHijoIzquierdo() == null){
             nodo.setCodigo(s);
-            s.replace(s, s.substring(0, s.length() - 1));
+            s.replace(s, s.substring(0, s.length() - 2));
             return null;
         }
         else{
@@ -82,7 +82,7 @@ public class ArbolHuffman {
 
     public static NodoHuffman getArbolDC(NodoHuffman nodo, String s){
         if (nodo.getHijoDerecho() == null){
-            s.replace(s, s.substring(0, s.length() - 1));
+            s.replace(s, s.substring(0, s.length() - 2));
             return null;
         }
         else{
@@ -95,9 +95,9 @@ public class ArbolHuffman {
         //NodoHuffman aux = nodo;
         if(!esHoja(nodo)){
             inOrden(getArbolIC(nodo, s));
-            s.replace(s, s.substring(0, s.length() - 1));
+            s.replace(s, s.substring(0, s.length() - 2));
             inOrden(getArbolDC(nodo, s));
-            s.replace(s, s.substring(0, s.length() - 1));
+            s.replace(s, s.substring(0, s.length() - 2));
         }
     }
 
