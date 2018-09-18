@@ -15,6 +15,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,6 +29,7 @@ public class DecompressHuff1 extends AppCompatActivity {
     TextView labelContenido;
 
     public static Uri file;
+    public static ArrayList<NodoHuffman> ListaNodos = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +83,9 @@ public class DecompressHuff1 extends AppCompatActivity {
                 DecompressHuff1.file = null;
                 break;
             case R.id.btnDescomprimir:
+                if (DecompressHuff1.file != null){
+
+                }
                 break;
         }
     }
@@ -113,5 +118,38 @@ public class DecompressHuff1 extends AppCompatActivity {
             Toast message = Toast.makeText(getApplicationContext(), "Por favor seleccione un archivo para continuar con la compresion", Toast.LENGTH_LONG);
             message.show();
         }
+    }
+
+    private void obtenerTabla(Uri uri) throws IOException{
+        String texto = readTextFromUri(uri);
+        String[] tablas = texto.split("%~%");
+        String[] tablaProb = tablas[0].split("/¬/");
+        for (int i = 0; i < tablaProb.length; i++) {
+            String[] probabilidades = tablaProb[i].split("#+#");
+            NodoHuffman nuevo = new NodoHuffman();
+            nuevo.setCaracter(probabilidades[0].charAt(0));
+            nuevo.setProbabilidad(Double.parseDouble(probabilidades[1]));
+            DecompressHuff1.ListaNodos.add(nuevo);
+        }
+        int salto = Integer.parseInt(tablas[1]);
+        char[] txt = tablas[2].toCharArray();
+        for (int i = salto - 1; i < txt.length; i++){
+
+        }
+    }
+
+    public String extraerBinarioDeAscii(String codigoAscii){
+        String textoEnBinario = "";
+        for (int i = 0; i < codigoAscii.length(); i++){
+            String asciiABinario = Integer.toBinaryString(codigoAscii.charAt(i));
+            if (asciiABinario.length() % 8 != 0){
+                int cerosRestantes = 8 - asciiABinario.length() % 8;
+                for (int j = 0; j < cerosRestantes; j++){
+                    asciiABinario = "0" + asciiABinario;
+                }
+            }
+            textoEnBinario += asciiABinario;
+        }
+        return textoEnBinario;
     }
 }
