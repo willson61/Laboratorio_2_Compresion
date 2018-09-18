@@ -18,9 +18,10 @@ public class ArbolHuffman {
             auxiliar.probabilidad = auxiliar.hijoDerecho.probabilidad + auxiliar.hijoIzquierdo.probabilidad;
             auxiliar.hijoIzquierdo.nodoPadre = auxiliar;
             auxiliar.hijoDerecho.nodoPadre = auxiliar;
-            lista.remove(0);
-            lista.remove(1);
             lista.add(auxiliar);
+            ordenamientoAsc(lista);
+            lista.remove(0);
+            lista.remove(0);
             if (lista.size() == 1){
                 nodoRaiz = auxiliar;
                 nodoRaiz.nodoPadre = null;
@@ -29,13 +30,15 @@ public class ArbolHuffman {
             }else {
                 ordenamientoAsc(lista);
             }
+            auxiliar = new NodoHuffman();
         }
 
     }
 
     public static ArrayList<NodoHuffman> CreacionArbolFinal(ArrayList<NodoHuffman> listaProbabilidades){
         armarArbol(listaProbabilidades);
-        inOrdenC(nodoRaiz, Num);
+        //inOrdenC(nodoRaiz, Num);
+        setBinario(nodoRaiz, "");
         ordenamientoAsc(retornar);
         return retornar;
     }
@@ -129,6 +132,17 @@ public class ArbolHuffman {
         }
         else{
             return false;
+        }
+    }
+
+    public static void setBinario(NodoHuffman nodo, String n){
+        if(nodo.getCaracter()==('\u0000')){
+            setBinario(nodo.getHijoIzquierdo(), n+"0");
+            setBinario(nodo.getHijoDerecho(), n + "1");
+        }
+        else{
+            nodo.setCodigo(n);
+            retornar.add(nodo);
         }
     }
 }

@@ -35,6 +35,7 @@ public class CompressHuff1 extends AppCompatActivity {
     public static ArrayList<NodoHuffman> ListaNodos = new ArrayList<>();
     public static ArrayList<NodoHuffman> ListaNodosConCodigos = new ArrayList<>();
     public static ArbolHuffman arbol = new ArbolHuffman();
+    public static int cerosExtra;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +50,9 @@ public class CompressHuff1 extends AppCompatActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btnBuscar:
+                if(CompressHuff1.file != null){
+                    borrarCampos();
+                }
                 Intent intent = new Intent()
                         .addCategory(Intent.CATEGORY_OPENABLE)
                         .setType("*/*")
@@ -56,28 +60,26 @@ public class CompressHuff1 extends AppCompatActivity {
                 startActivityForResult(Intent.createChooser(intent, "Select a File"), 123);
                 break;
             case R.id.btnCancelar:
-                /*finish();
-                startActivity(new Intent(CompressHuff1.this, CompressHuffResult.class));*/
-                labelNombre.setText(null);
-                labelContenido.setText(null);
-                CompressHuff1.file = null;
-                CompressHuff1.ListaCaracteres = new ArrayList<>();
-                CompressHuff1.ListaNodos = new ArrayList<>();
+                borrarCampos();
                 break;
             case R.id.btnComprimir:
-                try{
-                    if((CompressHuff1.ListaNodos.size() == 0) && (CompressHuff1.ListaCaracteres.size() == 0)){
-                        generarProbabilidades(CompressHuff1.file);
+                if(CompressHuff1.file != null){
+                    try{
+                        if((CompressHuff1.ListaNodos.size() == 0) && (CompressHuff1.ListaCaracteres.size() == 0)){
+                            generarProbabilidades(CompressHuff1.file);
+                            CompressHuff1.ListaNodosConCodigos = CompressHuff1.arbol.CreacionArbolFinal(CompressHuff1.ListaNodos);
+                            labelContenido.setText(crearBinario(readTextFromUri(CompressHuff1.file)));
+                        }
+                        else{
+                            CompressHuff1.ListaCaracteres = new ArrayList<>();
+                            CompressHuff1.ListaNodos = new ArrayList<>();
+                            generarProbabilidades(CompressHuff1.file);
+                            CompressHuff1.ListaNodosConCodigos = CompressHuff1.arbol.CreacionArbolFinal(CompressHuff1.ListaNodos);
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
-                    else{
-                        CompressHuff1.ListaCaracteres = new ArrayList<>();
-                        CompressHuff1.ListaNodos = new ArrayList<>();
-                        generarProbabilidades(CompressHuff1.file);
-                    }
-                }catch (Exception e){
-                    e.printStackTrace();
                 }
-                labelContenido.setText(pruebaProbabilidades());
                 break;
         }
     }
@@ -97,9 +99,7 @@ public class CompressHuff1 extends AppCompatActivity {
                     CompressHuff1.file = selectedFile;
                 }
                 else{
-                    labelNombre.setText(null);
-                    labelContenido.setText(null);
-                    CompressHuff1.file = null;
+                    borrarCampos();
                     Toast message = Toast.makeText(getApplicationContext(), "El archivo seleccionado no posee la extension .txt para compresion. Por favor seleccione un archivo de extension .txt", Toast.LENGTH_LONG);
                     message.show();
                 }
@@ -109,9 +109,7 @@ public class CompressHuff1 extends AppCompatActivity {
         } else if (resultCode == RESULT_CANCELED) {
             Toast message = Toast.makeText(getApplicationContext(), "Por favor seleccione un archivo para continuar con la compresion", Toast.LENGTH_LONG);
             message.show();
-            labelNombre.setText(null);
-            labelContenido.setText(null);
-            CompressHuff1.file = null;
+            borrarCampos();
         }
     }
 
@@ -172,11 +170,40 @@ public class CompressHuff1 extends AppCompatActivity {
         }
 
         public String pruebaProbabilidades () {
-            ListaNodosConCodigos = arbol.CreacionArbolFinal(CompressHuff1.ListaNodos);
+            if((CompressHuff1.ListaNodosConCodigos.size() != 0)){
+                CompressHuff1.ListaNodosConCodigos = new ArrayList<>();
+                CompressHuff1.arbol = new ArbolHuffman();
+                labelContenido.setText(null);
+            }
+            CompressHuff1.ListaNodosConCodigos = CompressHuff1.arbol.CreacionArbolFinal(CompressHuff1.ListaNodos);
             String st = "";
             for (int i = 0; i < CompressHuff1.ListaNodosConCodigos.size(); i++) {
                 st = st.concat(CompressHuff1.ListaNodosConCodigos.get(i).getCaracter() + " = " + CompressHuff1.ListaNodosConCodigos.get(i).getCodigo() + "\n");
             }
             return st;
         }
+
+        public void borrarCampos(){
+            labelNombre.setText(null);
+            labelContenido.setText(null);
+            CompressHuff1.file = null;
+            CompressHuff1.ListaCaracteres = new ArrayList<>();
+            CompressHuff1.ListaNodos = new ArrayList<>();
+            CompressHuff1.arbol = new ArbolHuffman();
+            CompressHuff1.ListaNodosConCodigos = new ArrayList<>();
+        }
+
+        public String crearBinario(String input){
+            String txt = "";
+            for(int i = 0; i < input.length(); i++){
+                for(NodoHuffman x: CompressHuff1.ListaNodosConCodigos){
+                    if(input.charAt(i) == x.getCaracter()){
+                        txt += x.getCodigo();
+                        break;
+                    }
+                }
+            }
+            return txt;
+        }
+
 }
