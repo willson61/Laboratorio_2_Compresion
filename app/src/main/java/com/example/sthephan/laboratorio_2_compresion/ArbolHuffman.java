@@ -6,6 +6,7 @@ public class ArbolHuffman {
     public static NodoHuffman nodoRaiz;
     //public static NodoHuffman nodoAux;
     public static String Num = "";
+    public static ArrayList<NodoHuffman> retornar = new ArrayList<>();
 
     public static void armarArbol(ArrayList<NodoHuffman> lista) {
         ordenamientoAsc(lista);
@@ -30,6 +31,13 @@ public class ArbolHuffman {
             }
         }
 
+    }
+
+    public static ArrayList<NodoHuffman> CreacionArbolFinal(ArrayList<NodoHuffman> listaProbabilidades){
+        armarArbol(listaProbabilidades);
+        inOrdenC(nodoRaiz, Num);
+        ordenamientoAsc(retornar);
+        return retornar;
     }
 
     public static void ordenamientoAsc(ArrayList<NodoHuffman> lista) {
@@ -61,8 +69,10 @@ public class ArbolHuffman {
 
     public static NodoHuffman getArbolIC(NodoHuffman nodo, String s){
         if (nodo.getHijoIzquierdo() == null){
+            s += "0";
             nodo.setCodigo(s);
-            s.replace(s, s.substring(0, s.length() - 2));
+            //s.replace(s, s.substring(0, s.length() - 2));
+            retornar.add(nodo);
             return null;
         }
         else{
@@ -82,7 +92,10 @@ public class ArbolHuffman {
 
     public static NodoHuffman getArbolDC(NodoHuffman nodo, String s){
         if (nodo.getHijoDerecho() == null){
-            s.replace(s, s.substring(0, s.length() - 2));
+            s += "1";
+            nodo.setCodigo(s);
+            //s.replace(s, s.substring(0, s.length() - 2));
+            retornar.add(nodo);
             return null;
         }
         else{

@@ -33,6 +33,8 @@ public class CompressHuff1 extends AppCompatActivity {
     public static Uri file;
     public static ArrayList<Character> ListaCaracteres = new ArrayList<>();
     public static ArrayList<NodoHuffman> ListaNodos = new ArrayList<>();
+    public static ArrayList<NodoHuffman> ListaNodosConCodigos = new ArrayList<>();
+    public static ArbolHuffman arbol = new ArbolHuffman();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,9 +172,10 @@ public class CompressHuff1 extends AppCompatActivity {
         }
 
         public String pruebaProbabilidades () {
+            ListaNodosConCodigos = arbol.CreacionArbolFinal(CompressHuff1.ListaNodos);
             String st = "";
-            for (int i = 0; i < CompressHuff1.ListaNodos.size(); i++) {
-                st = st.concat(CompressHuff1.ListaNodos.get(i).getCaracter() + " = " + Double.toString(CompressHuff1.ListaNodos.get(i).getProbabilidad()) + "\n");
+            for (int i = 0; i < CompressHuff1.ListaNodosConCodigos.size(); i++) {
+                st = st.concat(CompressHuff1.ListaNodosConCodigos.get(i).getCaracter() + " = " + CompressHuff1.ListaNodosConCodigos.get(i).getCodigo() + "\n");
             }
             return st;
         }
