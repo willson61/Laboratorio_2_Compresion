@@ -15,6 +15,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,6 +29,11 @@ public class DecompressHuff1 extends AppCompatActivity {
     TextView labelContenido;
 
     public static Uri file;
+    public static ArrayList<NodoHuffman> ListaNodos = new ArrayList<>();
+    public static ArrayList<NodoHuffman> ListaNodosConCodigo = new ArrayList<>();
+    public static int Salto;
+    public static String Texto;
+    public static ArbolHuffman arbol = new ArbolHuffman();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +87,13 @@ public class DecompressHuff1 extends AppCompatActivity {
                 DecompressHuff1.file = null;
                 break;
             case R.id.btnDescomprimir:
+                if (DecompressHuff1.file != null){
+                    try{
+
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
                 break;
         }
     }
@@ -113,5 +126,66 @@ public class DecompressHuff1 extends AppCompatActivity {
             Toast message = Toast.makeText(getApplicationContext(), "Por favor seleccione un archivo para continuar con la compresion", Toast.LENGTH_LONG);
             message.show();
         }
+    }
+
+    private void obtenerTabla(Uri uri) throws IOException{
+        String texto = readTextFromUri(uri);
+        String[] tablas = texto.split("%~%");
+        String[] tablaProb = tablas[0].split("/¬/");
+        for (int i = 0; i < tablaProb.length; i++) {
+            String[] probabilidades = tablaProb[i].split("#+#");
+            NodoHuffman nuevo = new NodoHuffman();
+            nuevo.setCaracter(probabilidades[0].charAt(0));
+            nuevo.setProbabilidad(Double.parseDouble(probabilidades[1]));
+            DecompressHuff1.ListaNodos.add(nuevo);
+        }
+        Salto = Integer.parseInt(tablas[1]);
+        Texto = tablas[2];
+    }
+
+    private void DescompresionFinal() throws IOException{
+        obtenerTabla(DecompressHuff1.file);
+        DecompressHuff1.ListaNodosConCodigo = DecompressHuff1.arbol.CreacionArbolFinal(DecompressHuff1.ListaNodos);
+        String texto = Descomprimir(DecompressHuff1.Texto);
+    }
+
+    private String Descomprimir(String texto){
+        char[] txt = extraerBinarioDeAscii(texto).toCharArray();
+        String caracter = "";
+        String TextoDesc = "";
+        for (int i = Salto-1; i < txt.length; i++){
+            caracter += txt[i];
+            int j = 0;
+            boolean existe = false;
+            while (j < DecompressHuff1.ListaNodosConCodigo.size() && !existe){
+                if (DecompressHuff1.ListaNodosConCodigo.get(j).getCodigo().equals(caracter)){
+                    TextoDesc += DecompressHuff1.ListaNodosConCodigo.get(j).getCaracter();
+                    caracter = "";
+                    existe = true;
+                }
+            }
+            /*for (int j = 0; j < DecompressHuff1.ListaNodos.size(); j++){
+                if (DecompressHuff1.ListaNodos.get(j).getCodigo().equals(caracter)){
+                    TextoDesc += caracter;
+                    caracter = "";
+                }
+            }*/
+        }
+        return TextoDesc;
+    }
+
+    public String extraerBinarioDeAscii(String codigoAscii){
+        String textoEnBinario = "";
+        for (int i = 0; i < codigoAscii.length(); i++){
+            String asciiABinario = Integer.toBinaryString(codigoAscii.charAt(i));
+            if (asciiABinario.length() % 8 != 0){
+                int cerosRestantes = 8 - asciiABinario.length() % 8;
+                for (int j = 0; j < cerosRestantes; j++){
+                    asciiABinario = "0" + asciiABinario;
+                }
+            }
+            textoEnBinario += asciiABinario;
+        }
+        return textoEnBinario;
     }
 }
