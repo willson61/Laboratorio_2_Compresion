@@ -68,7 +68,15 @@ public class CompressHuff1 extends AppCompatActivity {
                         if((CompressHuff1.ListaNodos.size() == 0) && (CompressHuff1.ListaCaracteres.size() == 0)){
                             generarProbabilidades(CompressHuff1.file);
                             CompressHuff1.ListaNodosConCodigos = CompressHuff1.arbol.CreacionArbolFinal(CompressHuff1.ListaNodos);
-                            labelContenido.setText(crearBinario(readTextFromUri(CompressHuff1.file)));
+                            CompressHuffResult.txtBinario = crearBinario(readTextFromUri(CompressHuff1.file));
+                            CompressHuffResult.txtAscii = textoToAscii(CompressHuffResult.txtBinario);
+                            CompressHuffResult.file = CompressHuff1.file;
+                            CompressHuffResult.arbol = CompressHuff1.arbol;
+                            CompressHuffResult.ListaNodosConCodigos = CompressHuff1.ListaNodosConCodigos;
+                            CompressHuffResult.cerosExtra = CompressHuff1.cerosExtra;
+                            borrarCampos();
+                            finish();
+                            startActivity(new Intent(CompressHuff1.this, CompressHuffResult.class));
                         }
                         else{
                             CompressHuff1.ListaCaracteres = new ArrayList<>();
@@ -203,7 +211,34 @@ public class CompressHuff1 extends AppCompatActivity {
                     }
                 }
             }
+            cerosExtra = 8 - txt.length() % 8;
+            if(cerosExtra != 8){
+                for(int i = 0; i < cerosExtra; i++){
+                    txt = "0" + txt;
+                }
+            }
             return txt;
         }
+
+    public String textoToAscii(String txtBinario){
+        String txtAscii = "";
+        int cont = 0;
+        String ascii = "";
+        int num = 0;
+
+        for (int i = 0; i < txtBinario.length(); i++) {
+            cont++;
+            if (cont <= 8) {
+                ascii = ascii + txtBinario.charAt(i);
+                if ((cont == 8)||(i == txtBinario.length() - 1)){
+                    num = Integer.parseInt(ascii,2);
+                    txtAscii += (char)Integer.valueOf(num).intValue();
+                    cont = 0;
+                    ascii = "";
+                }
+            }
+        }
+        return txtAscii;
+    }
 
 }
