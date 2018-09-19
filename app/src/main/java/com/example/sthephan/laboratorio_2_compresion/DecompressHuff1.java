@@ -30,6 +30,8 @@ public class DecompressHuff1 extends AppCompatActivity {
 
     public static Uri file;
     public static ArrayList<NodoHuffman> ListaNodos = new ArrayList<>();
+    public static int Salto;
+    public static String Texto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,11 +133,33 @@ public class DecompressHuff1 extends AppCompatActivity {
             nuevo.setProbabilidad(Double.parseDouble(probabilidades[1]));
             DecompressHuff1.ListaNodos.add(nuevo);
         }
-        int salto = Integer.parseInt(tablas[1]);
-        char[] txt = tablas[2].toCharArray();
-        for (int i = salto - 1; i < txt.length; i++){
+        Salto = Integer.parseInt(tablas[1]);
+        Texto = tablas[2];
+    }
 
+    private String Descomprimir(String texto){
+        char[] txt = extraerBinarioDeAscii(texto).toCharArray();
+        String caracter = "";
+        String TextoDesc = "";
+        for (int i = Salto; i < txt.length; i++){
+            caracter += txt[i];
+            int j = 0;
+            boolean existe = false;
+            while (j < DecompressHuff1.ListaNodos.size() && !existe){
+                if (DecompressHuff1.ListaNodos.get(j).getCodigo().equals(caracter)){
+                    TextoDesc += DecompressHuff1.ListaNodos.get(j).getCaracter();
+                    caracter = "";
+                    existe = true;
+                }
+            }
+            /*for (int j = 0; j < DecompressHuff1.ListaNodos.size(); j++){
+                if (DecompressHuff1.ListaNodos.get(j).getCodigo().equals(caracter)){
+                    TextoDesc += caracter;
+                    caracter = "";
+                }
+            }*/
         }
+        return TextoDesc;
     }
 
     public String extraerBinarioDeAscii(String codigoAscii){
