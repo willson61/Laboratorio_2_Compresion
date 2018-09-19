@@ -30,6 +30,7 @@ public class DecompressHuff1 extends AppCompatActivity {
 
     public static Uri file;
     public static ArrayList<NodoHuffman> ListaNodos = new ArrayList<>();
+    public static ArrayList<NodoHuffman> ListaNodosConCodigo = new ArrayList<>();
     public static int Salto;
     public static String Texto;
 
@@ -137,11 +138,16 @@ public class DecompressHuff1 extends AppCompatActivity {
         Texto = tablas[2];
     }
 
+    private void DescompresionFinal() throws IOException{
+        obtenerTabla(DecompressHuff1.file);
+        String texto = Descomprimir(DecompressHuff1.Texto);
+    }
+
     private String Descomprimir(String texto){
         char[] txt = extraerBinarioDeAscii(texto).toCharArray();
         String caracter = "";
         String TextoDesc = "";
-        for (int i = Salto; i < txt.length; i++){
+        for (int i = Salto-1; i < txt.length; i++){
             caracter += txt[i];
             int j = 0;
             boolean existe = false;
