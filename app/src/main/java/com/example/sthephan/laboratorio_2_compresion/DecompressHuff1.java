@@ -33,6 +33,7 @@ public class DecompressHuff1 extends AppCompatActivity {
     public static ArrayList<NodoHuffman> ListaNodosConCodigo = new ArrayList<>();
     public static int Salto;
     public static String Texto;
+    public static ArbolHuffman arbol = new ArbolHuffman();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +88,11 @@ public class DecompressHuff1 extends AppCompatActivity {
                 break;
             case R.id.btnDescomprimir:
                 if (DecompressHuff1.file != null){
+                    try{
 
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
                 }
                 break;
         }
@@ -140,6 +145,7 @@ public class DecompressHuff1 extends AppCompatActivity {
 
     private void DescompresionFinal() throws IOException{
         obtenerTabla(DecompressHuff1.file);
+        DecompressHuff1.ListaNodosConCodigo = DecompressHuff1.arbol.CreacionArbolFinal(DecompressHuff1.ListaNodos);
         String texto = Descomprimir(DecompressHuff1.Texto);
     }
 
@@ -151,9 +157,9 @@ public class DecompressHuff1 extends AppCompatActivity {
             caracter += txt[i];
             int j = 0;
             boolean existe = false;
-            while (j < DecompressHuff1.ListaNodos.size() && !existe){
-                if (DecompressHuff1.ListaNodos.get(j).getCodigo().equals(caracter)){
-                    TextoDesc += DecompressHuff1.ListaNodos.get(j).getCaracter();
+            while (j < DecompressHuff1.ListaNodosConCodigo.size() && !existe){
+                if (DecompressHuff1.ListaNodosConCodigo.get(j).getCodigo().equals(caracter)){
+                    TextoDesc += DecompressHuff1.ListaNodosConCodigo.get(j).getCaracter();
                     caracter = "";
                     existe = true;
                 }
