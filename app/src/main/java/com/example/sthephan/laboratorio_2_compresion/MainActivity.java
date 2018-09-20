@@ -25,8 +25,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         labelManual.setMovementMethod(new ScrollingMovementMethod());
-        labelManual.setText("Este laboratorio tiene 2 opciones de menu. La primera es la compresion de aun archivo por el algoritmo de huffman." +
-                "\nEsta primera oprion nos llevara a la ventana de compresion de archivos. En ella tenemos tres opciones: Buscar un archivo para " +
+        labelManual.setText("Este laboratorio tiene 2 opciones de menu. La primera es la compresion de un archivo por el algoritmo de huffman." +
+                "\nEsta primera opcion nos llevara a la ventana de compresion de archivos. En ella tenemos tres opciones: Buscar un archivo para " +
                 "comprimir, cancelar la busqueda hecha para realizar una nueva busqueda y comprimir para iniciar la compresion del archivo." +
                 "\nDespues de haber seleccionado el archivo a comprimir y haberle dado click al boton de comprimir se nos mostrara una ventana con la compresion " +
                 "binaria del archivo que seleccionamos, la codificacion en codigo Ascii del codigo binario y los botones para guardar este archivo de compresion o para borrarlo.\n" +
