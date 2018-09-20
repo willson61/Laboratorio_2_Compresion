@@ -1,21 +1,43 @@
 package com.example.sthephan.laboratorio_2_compresion;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.text.method.ScrollingMovementMethod;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
+import android.widget.TextView;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
+
+    @BindView(R.id.labelTitulo)
+    TextView labelTitulo;
+    @BindView(R.id.labelManual)
+    TextView labelManual;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
+        labelManual.setMovementMethod(new ScrollingMovementMethod());
+        labelManual.setText("Este laboratorio tiene 2 opciones de menu. La primera es la compresion de aun archivo por el algoritmo de huffman." +
+                "\nEsta primera oprion nos llevara a la ventana de compresion de archivos. En ella tenemos tres opciones: Buscar un archivo para " +
+                "comprimir, cancelar la busqueda hecha para realizar una nueva busqueda y comprimir para iniciar la compresion del archivo." +
+                "\nDespues de haber seleccionado el archivo a comprimir y haberle dado click al boton de comprimir se nos mostrara una ventana con la compresion " +
+                "binaria del archivo que seleccionamos, la codificacion en codigo Ascii del codigo binario y los botones para guardar este archivo de compresion o para borrarlo.\n" +
+                "Si le damos click en guardar se guardara este archivo comprimido .huff en el dispositivo y regresaremos a la ventana de inicio de la aplicacion; y si presionamos" +
+                " el boton de borrar no se guardara este archivo comprimido y se regresara a la ventana de inicio.\n" +
+                "La otra opcion en el menu de inicio es la de descompresion de archivos con extension .huff. Dentro de esta opcion encontraremos las mismas opciones que " +
+                "en la opcion de compresion, busqueda, cancular y en este caso descompresion.\nAl ya haber seleccionado un archivo y haberle dado click en descomprimir" +
+                " se nos presentara una ventana con el texto descomprimido del archivo que seleccionamos anteriormente. En esta ventana tambien tenemos las mismas opciones de borrar y guardar" +
+                " el archivo que se acaba de descomprimir. Con esto concluye el manual de usuario.\n Nota: En los procesos de compresion y descompresion es normal" +
+                " que la aplicacion no reaccione por unos minuntos, esto se debe a la cantidad de datos que el programa esta comprimiendo o descomprimiendo.\nAutores:\n" +
+                "Williams Monterroso Contreras #1021417\nJose Fuentes Araujo #1168315");
     }
 
     @Override

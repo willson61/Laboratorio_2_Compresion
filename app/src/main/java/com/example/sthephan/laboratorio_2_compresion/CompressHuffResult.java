@@ -1,10 +1,8 @@
 package com.example.sthephan.laboratorio_2_compresion;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -14,7 +12,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
@@ -41,6 +38,9 @@ public class CompressHuffResult extends AppCompatActivity {
     public static String filePath;
     public static String fileName;
 
+    @BindView(R.id.labelBinario)
+    TextView labelBinario;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +52,7 @@ public class CompressHuffResult extends AppCompatActivity {
         String prueba2 = prueba[prueba.length - 1].replace(".txt", ".huff");
         labelNombre.setText(prueba2);
         labelContenido.setText(txtAscii);
+        labelBinario.setText(txtBinario);
         filePath = CompressHuffResult.file.getPath().replace(prueba[prueba.length - 1], prueba2);
     }
 
@@ -86,8 +87,8 @@ public class CompressHuffResult extends AppCompatActivity {
                 File root = new File(Environment.getExternalStorageDirectory(), "Documentos");
                 root.mkdirs();
                 File archivoHuff = new File(root, labelNombre.getText().toString());
-                try{
-                    if(archivoHuff.exists()){
+                try {
+                    if (archivoHuff.exists()) {
                         archivoHuff.delete();
                     }
                     FileOutputStream fos = new FileOutputStream(archivoHuff, true);
@@ -95,16 +96,15 @@ public class CompressHuffResult extends AppCompatActivity {
                     fos.flush();
                     fos.close();
                     archivoHuff.createNewFile();
-                }catch(Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
-                if (archivoHuff.exists()){
+                if (archivoHuff.exists()) {
                     Toast message = Toast.makeText(getApplicationContext(), "El archivo se a creado exitosamente", Toast.LENGTH_LONG);
                     message.show();
                     finish();
                     startActivity(new Intent(CompressHuffResult.this, MainActivity.class));
-                }
-                else{
+                } else {
                     Toast message = Toast.makeText(getApplicationContext(), "El archivo no existe", Toast.LENGTH_LONG);
                     message.show();
                     finish();
@@ -114,11 +114,14 @@ public class CompressHuffResult extends AppCompatActivity {
             case R.id.btnBorrar:
                 Toast message = Toast.makeText(getApplicationContext(), "El archivo se a borrado exitosamente", Toast.LENGTH_LONG);
                 message.show();
+                borrarTodo();
+                finish();
+                startActivity(new Intent(CompressHuffResult.this, MainActivity.class));
                 break;
         }
     }
 
-    public void borrarTodo(){
+    public void borrarTodo() {
         CompressHuffResult.txtAscii = null;
         CompressHuffResult.cerosExtra = 0;
         CompressHuffResult.ListaNodosConCodigos = new ArrayList<>();
@@ -131,11 +134,11 @@ public class CompressHuffResult extends AppCompatActivity {
         CompressHuffResult.ListaCaracteres = new ArrayList<>();
     }
 
-    public String createTextForFile(){
+    public String createTextForFile() {
         String txtArchivo = "";
-        for(int i = 0; i < CompressHuffResult.ListaNodosConCodigos.size(); i++){
-            txtArchivo += CompressHuffResult.ListaNodosConCodigos.get(i).getCaracter() + "#+#" + Double.toString(CompressHuffResult.ListaNodosConCodigos.get(i).getProbabilidad());
-            if(i != CompressHuffResult.ListaNodosConCodigos.size() - 1){
+        for (int i = 0; i < CompressHuffResult.ListaNodosConCodigos.size(); i++) {
+            txtArchivo += CompressHuffResult.ListaNodosConCodigos.get(i).getCaracter() + "#~#" + Double.toString(CompressHuffResult.ListaNodosConCodigos.get(i).getProbabilidad());
+            if (i != CompressHuffResult.ListaNodosConCodigos.size() - 1) {
                 txtArchivo += "/¬/";
             }
         }

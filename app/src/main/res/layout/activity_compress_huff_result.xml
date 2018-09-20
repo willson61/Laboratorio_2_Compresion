@@ -17,8 +17,8 @@
 
     <TextView
         android:id="@+id/labelContenido"
-        android:layout_width="340dp"
-        android:layout_height="315dp"
+        android:layout_width="322dp"
+        android:layout_height="135dp"
         android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/labelNombre"
         android:layout_marginTop="50dp"
@@ -40,8 +40,17 @@
         style="@android:style/Widget.Button"
         android:layout_width="125dp"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/labelContenido"
+        android:layout_alignParentEnd="true"
         android:layout_alignTop="@+id/btnGuardar"
+        android:layout_marginEnd="40dp"
         android:background="@color/colorPrimary"
         android:text="@string/borrar" />
+
+    <TextView
+        android:id="@+id/labelBinario"
+        android:layout_width="323dp"
+        android:layout_height="135dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/labelNombre"
+        android:layout_marginTop="200dp" />
 </RelativeLayout>
