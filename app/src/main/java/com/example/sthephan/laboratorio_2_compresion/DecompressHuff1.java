@@ -34,6 +34,7 @@ public class DecompressHuff1 extends AppCompatActivity {
     public static int Salto;
     public static String Texto;
     public static ArbolHuffman arbol = new ArbolHuffman();
+    public static ArrayList<NodoHuffman> ListaNodosConCodigoOriginal = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,11 +152,18 @@ public class DecompressHuff1 extends AppCompatActivity {
 
     private void DescompresionFinal() throws IOException{
         obtenerTabla(DecompressHuff1.file);
-        DecompressHuff1.ListaNodosConCodigo = DecompressHuff1.arbol.CreacionArbolFinal(DecompressHuff1.ListaNodos);
+        ArrayList<NodoHuffman> temp = new ArrayList<>();
+        for (NodoHuffman n: DecompressHuff1.ListaNodos) {
+            temp.add(n);
+        }
+        if(DecompressHuff1.ListaNodosConCodigo.size() == 0){
+            DecompressHuff1.ListaNodosConCodigo = DecompressHuff1.arbol.CreacionArbolFinal(temp);
+        }
         String texto = Descomprimir(DecompressHuff1.Texto);
         String[] pr = DecompressHuff1.file.getPath().split("/");
         DecompressHuffResult.txtDescompresion = texto;
         DecompressHuffResult.nombreArchivo = pr[pr.length - 1].replace(".huff", "");
+        borrarTodo();
         finish();
         startActivity(new Intent(DecompressHuff1.this, DecompressHuffResult.class));
     }
@@ -201,5 +209,14 @@ public class DecompressHuff1 extends AppCompatActivity {
             txtEnBinario += asciiABinario;
         }
         return txtEnBinario;
+    }
+
+    public void borrarTodo(){
+        DecompressHuff1.file = null;
+        DecompressHuff1.Salto = 0;
+        DecompressHuff1.Texto = null;
+        DecompressHuff1.arbol = new ArbolHuffman();
+        DecompressHuff1.ListaNodos = new ArrayList<>();
+        DecompressHuff1.ListaNodosConCodigo = new ArrayList<>();
     }
 }

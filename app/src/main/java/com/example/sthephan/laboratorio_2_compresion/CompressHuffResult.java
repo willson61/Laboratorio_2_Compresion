@@ -47,6 +47,7 @@ public class CompressHuffResult extends AppCompatActivity {
         setContentView(R.layout.activity_compress_huff_result);
         ButterKnife.bind(this);
         labelContenido.setMovementMethod(new ScrollingMovementMethod());
+        labelBinario.setMovementMethod(new ScrollingMovementMethod());
         String[] prueba = CompressHuffResult.file.getPath().split("/");
         fileName = prueba[prueba.length - 1].replace(".txt", "");
         String prueba2 = prueba[prueba.length - 1].replace(".txt", ".huff");
@@ -102,11 +103,13 @@ public class CompressHuffResult extends AppCompatActivity {
                 if (archivoHuff.exists()) {
                     Toast message = Toast.makeText(getApplicationContext(), "El archivo se a creado exitosamente", Toast.LENGTH_LONG);
                     message.show();
+                    borrarTodo();
                     finish();
                     startActivity(new Intent(CompressHuffResult.this, MainActivity.class));
                 } else {
                     Toast message = Toast.makeText(getApplicationContext(), "El archivo no existe", Toast.LENGTH_LONG);
                     message.show();
+                    borrarTodo();
                     finish();
                     startActivity(new Intent(CompressHuffResult.this, MainActivity.class));
                 }

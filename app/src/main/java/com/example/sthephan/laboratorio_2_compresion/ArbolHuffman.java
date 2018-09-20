@@ -23,8 +23,8 @@ public class ArbolHuffman {
             lista.remove(0);
             lista.remove(0);
             if (lista.size() == 1){
-                nodoRaiz = auxiliar;
-                nodoRaiz.nodoPadre = null;
+                ArbolHuffman.nodoRaiz = auxiliar;
+                ArbolHuffman.nodoRaiz.nodoPadre = null;
                 //nodoAux = nodoRaiz;
                 completo = false;
             }else {
@@ -36,11 +36,12 @@ public class ArbolHuffman {
     }
 
     public static ArrayList<NodoHuffman> CreacionArbolFinal(ArrayList<NodoHuffman> listaProbabilidades){
+        ArbolHuffman.retornar = new ArrayList<>();
         armarArbol(listaProbabilidades);
         //inOrdenC(nodoRaiz, Num);
-        setBinario(nodoRaiz, "");
-        ordenamientoAsc(retornar);
-        return retornar;
+        setBinario(ArbolHuffman.nodoRaiz, "");
+        ordenamientoAsc(ArbolHuffman.retornar);
+        return ArbolHuffman.retornar;
     }
 
     public static void ordenamientoAsc(ArrayList<NodoHuffman> lista) {

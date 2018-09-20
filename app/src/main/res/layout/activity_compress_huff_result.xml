@@ -52,5 +52,6 @@
         android:layout_height="135dp"
         android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/labelNombre"
-        android:layout_marginTop="200dp" />
+        android:layout_marginTop="200dp"
+        android:scrollbars="vertical"/>
 </RelativeLayout>
