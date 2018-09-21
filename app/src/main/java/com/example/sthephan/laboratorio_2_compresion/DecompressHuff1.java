@@ -33,7 +33,7 @@ public class DecompressHuff1 extends AppCompatActivity {
     public static ArrayList<NodoHuffman> ListaNodosConCodigo = new ArrayList<>();
     public static int Salto;
     public static String Texto;
-    public static ArbolHuffman arbol = new ArbolHuffman();
+    public static ArbolHuffman arbol2 = new ArbolHuffman();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,7 +151,9 @@ public class DecompressHuff1 extends AppCompatActivity {
 
     private void DescompresionFinal() throws IOException{
         obtenerTabla(DecompressHuff1.file);
-        DecompressHuff1.ListaNodosConCodigo = DecompressHuff1.arbol.CreacionArbolFinal(DecompressHuff1.ListaNodos);
+        DecompressHuff1.ListaNodosConCodigo = new ArrayList<>();
+        arbol2.retornar = new ArrayList<>();
+        DecompressHuff1.ListaNodosConCodigo = DecompressHuff1.arbol2.CreacionArbolFinal(DecompressHuff1.ListaNodos);
         String texto = Descomprimir(DecompressHuff1.Texto);
         String[] pr = DecompressHuff1.file.getPath().split("/");
         DecompressHuffResult.txtDescompresion = texto;
