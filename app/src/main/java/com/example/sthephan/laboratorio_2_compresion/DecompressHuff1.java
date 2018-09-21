@@ -169,16 +169,16 @@ public class DecompressHuff1 extends AppCompatActivity {
     }
 
     private String Descomprimir(String texto){
-        char[] txt = extraerBinarioDeAscii(texto).toCharArray();
+        char[] txt = extraerBinarioDeAscii(texto).substring(DecompressHuff1.Salto).toCharArray();
         String caracter = "";
         String TextoDesc = "";
-        for (int i = DecompressHuff1.Salto; i < txt.length; i++){
+        for (int i = 0; i < txt.length; i++){
             caracter += txt[i];
             int j = 0;
             boolean existe = false;
-            while (j < DecompressHuff1.ListaNodosConCodigo.size() && !existe){
-                if (DecompressHuff1.ListaNodosConCodigo.get(j).getCodigo().equals(caracter)){
-                    TextoDesc += DecompressHuff1.ListaNodosConCodigo.get(j).getCaracter();
+            while (j < DecompressHuff1.ListaNodosConCodigoOriginal.size() && !existe){
+                if (DecompressHuff1.ListaNodosConCodigoOriginal.get(j).getCodigo().equals(caracter)){
+                    TextoDesc += DecompressHuff1.ListaNodosConCodigoOriginal.get(j).getCaracter();
                     caracter = "";
                     existe = true;
                 }
