@@ -140,7 +140,7 @@ public class CompressHuffResult extends AppCompatActivity {
     public String createTextForFile() {
         String txtArchivo = "";
         for (int i = 0; i < CompressHuffResult.ListaNodosConCodigos.size(); i++) {
-            txtArchivo += CompressHuffResult.ListaNodosConCodigos.get(i).getCaracter() + "#~#" + Double.toString(CompressHuffResult.ListaNodosConCodigos.get(i).getProbabilidad());
+            txtArchivo += CompressHuffResult.ListaNodosConCodigos.get(i).getCaracter() + "#~#" + Float.toString(CompressHuffResult.ListaNodosConCodigos.get(i).getProbabilidad());
             if (i != CompressHuffResult.ListaNodosConCodigos.size() - 1) {
                 txtArchivo += "/¬/";
             }

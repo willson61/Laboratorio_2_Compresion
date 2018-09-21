@@ -151,8 +151,8 @@ public class CompressHuff1 extends AppCompatActivity {
             char[] txt = texto.toCharArray();
             for (int i = 0; i < txt.length; i++) {
                 if (!CompressHuff1.ListaCaracteres.contains(txt[i])) {
-                    double cantCar = contarCaracteres(txt[i], txt);
-                    double prob = cantCar / (double) txt.length;
+                    float cantCar = contarCaracteres(txt[i], txt);
+                    float prob = cantCar / (float) txt.length;
                     NodoHuffman nodo = new NodoHuffman();
                     nodo.setCaracter(txt[i]);
                     nodo.setProbabilidad(prob);

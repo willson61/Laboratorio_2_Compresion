@@ -143,7 +143,7 @@ public class DecompressHuff1 extends AppCompatActivity {
             String[] probabilidades = tablaProb[i].split("#~#");
             NodoHuffman nuevo = new NodoHuffman();
             nuevo.setCaracter(probabilidades[0].charAt(0));
-            nuevo.setProbabilidad(Double.parseDouble(probabilidades[1]));
+            nuevo.setProbabilidad(Float.parseFloat(probabilidades[1]));
             DecompressHuff1.ListaNodos.add(nuevo);
         }
         DecompressHuff1.Salto = Integer.parseInt(tablas[1]);
@@ -194,6 +194,41 @@ public class DecompressHuff1 extends AppCompatActivity {
             }*/
         }
         return TextoDesc;
+    }
+
+    private String Descomprimir2(String texto){
+        char[] txt = texto.substring(DecompressHuff1.Salto).toCharArray();
+        NodoHuffman nod = DecompressHuff1.arbol.getNodoRaiz();
+        boolean hoja = false;
+        boolean fin = false;
+        int j = 0;
+        String caracter = null;
+        while(!fin){
+            while(!hoja){
+                if((nod.getHijoIzquierdo() != null) || (nod.getHijoDerecho() != null)){
+                    if(txt[j] == '0'){
+                        nod = nod.getHijoIzquierdo();
+                        j++;
+                    }
+                    else{
+                        nod = nod.getHijoDerecho();
+                        j++;
+                    }
+                }
+                else{
+                    caracter += nod.getCaracter();
+                    nod = DecompressHuff1.arbol.getNodoRaiz();
+                    hoja = true;
+                }
+            }
+            if(j >= txt.length - 1){
+                fin = true;
+            }
+            else{
+                hoja =false;
+            }
+        }
+        return caracter;
     }
 
     public String extraerBinarioDeAscii(String codigoAscii){

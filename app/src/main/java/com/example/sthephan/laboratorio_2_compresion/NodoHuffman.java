@@ -1,26 +1,28 @@
 package com.example.sthephan.laboratorio_2_compresion;
 
+import java.util.Comparator;
+
 public class NodoHuffman {
 
-    public double probabilidad;
-    public char caracter;
+    public float probabilidad;
+    public Character caracter;
     public String codigo;
     public NodoHuffman hijoIzquierdo;
     public NodoHuffman hijoDerecho;
     public NodoHuffman nodoPadre;
 
-    public double getProbabilidad(){
+    public float getProbabilidad(){
         return probabilidad;
     }
-    public void setProbabilidad(double probabilidad) {
+    public void setProbabilidad(float probabilidad) {
         this.probabilidad = probabilidad;
     }
 
-    public char getCaracter(){
+    public Character getCaracter(){
         return caracter;
     }
 
-    public void setCaracter(char caracter){
+    public void setCaracter(Character caracter){
         this.caracter = caracter;
     }
 
@@ -64,4 +66,27 @@ public class NodoHuffman {
             return false;
         }
     }*/
+}
+class CompareByProbabilidad implements Comparator<NodoHuffman> {
+
+    @Override
+    public int compare(NodoHuffman c1, NodoHuffman c2) {
+
+        if (c1.getProbabilidad() == c2.getProbabilidad()) {
+            if((c1.getCaracter() != null) && (c2.getCaracter() != null)){
+                return c1.getCaracter().compareTo(c2.getCaracter());
+            }
+            else{
+                return 0;
+            }
+        }
+        else if (c1.getProbabilidad() < c2.getProbabilidad()) {
+            return -1;
+        }
+        else{
+            return 1;
+        }
+
+    }
+
 }
