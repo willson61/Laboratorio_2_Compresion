@@ -1,15 +1,16 @@
 package com.example.sthephan.laboratorio_2_compresion;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class ArbolHuffman {
+
     public static NodoHuffman nodoRaiz;
-    //public static NodoHuffman nodoAux;
     public static String Num = "";
     public static ArrayList<NodoHuffman> retornar = new ArrayList<>();
 
     public static void armarArbol(ArrayList<NodoHuffman> lista) {
-        ordenamientoAsc(lista);
+        Collections.sort(lista, new CompareByProbabilidad());
         boolean completo = true;
         NodoHuffman auxiliar = new NodoHuffman();
         while (completo){
@@ -19,16 +20,15 @@ public class ArbolHuffman {
             auxiliar.hijoIzquierdo.nodoPadre = auxiliar;
             auxiliar.hijoDerecho.nodoPadre = auxiliar;
             lista.add(auxiliar);
-            ordenamientoAsc(lista);
             lista.remove(0);
             lista.remove(0);
             if (lista.size() == 1){
-                nodoRaiz = auxiliar;
-                nodoRaiz.nodoPadre = null;
+                ArbolHuffman.nodoRaiz = auxiliar;
+                ArbolHuffman.nodoRaiz.nodoPadre = null;
                 //nodoAux = nodoRaiz;
                 completo = false;
             }else {
-                ordenamientoAsc(lista);
+                Collections.sort(lista, new CompareByProbabilidad());
             }
             auxiliar = new NodoHuffman();
         }
@@ -36,11 +36,12 @@ public class ArbolHuffman {
     }
 
     public static ArrayList<NodoHuffman> CreacionArbolFinal(ArrayList<NodoHuffman> listaProbabilidades){
+        ArbolHuffman.retornar = new ArrayList<>();
         armarArbol(listaProbabilidades);
         //inOrdenC(nodoRaiz, Num);
-        setBinario(nodoRaiz, "");
-        ordenamientoAsc(retornar);
-        return retornar;
+        setBinario(ArbolHuffman.nodoRaiz, "");
+        Collections.sort(ArbolHuffman.retornar, new CompareByProbabilidad());
+        return ArbolHuffman.retornar;
     }
 
     public static void ordenamientoAsc(ArrayList<NodoHuffman> lista) {
@@ -136,7 +137,7 @@ public class ArbolHuffman {
     }
 
     public static void setBinario(NodoHuffman nodo, String n){
-        if(nodo.getCaracter()==('\u0000')){
+        if(nodo.getCaracter()==(null)){
             setBinario(nodo.getHijoIzquierdo(), n+"0");
             setBinario(nodo.getHijoDerecho(), n + "1");
         }

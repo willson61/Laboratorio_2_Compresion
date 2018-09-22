@@ -65,25 +65,21 @@ public class CompressHuff1 extends AppCompatActivity {
             case R.id.btnComprimir:
                 if(CompressHuff1.file != null){
                     try{
-                        if((CompressHuff1.ListaNodos.size() == 0) && (CompressHuff1.ListaCaracteres.size() == 0)){
-                            generarProbabilidades(CompressHuff1.file);
-                            CompressHuff1.ListaNodosConCodigos = CompressHuff1.arbol.CreacionArbolFinal(CompressHuff1.ListaNodos);
-                            CompressHuffResult.txtBinario = crearBinario(readTextFromUri(CompressHuff1.file));
-                            CompressHuffResult.txtAscii = textoToAscii(CompressHuffResult.txtBinario);
-                            CompressHuffResult.file = CompressHuff1.file;
-                            CompressHuffResult.arbol = CompressHuff1.arbol;
-                            CompressHuffResult.ListaNodosConCodigos = CompressHuff1.ListaNodosConCodigos;
-                            CompressHuffResult.cerosExtra = CompressHuff1.cerosExtra;
-                            borrarCampos();
-                            finish();
-                            startActivity(new Intent(CompressHuff1.this, CompressHuffResult.class));
-                        }
-                        else{
+                        if((CompressHuff1.ListaNodos.size() != 0) || (CompressHuff1.ListaCaracteres.size() != 0)){
                             CompressHuff1.ListaCaracteres = new ArrayList<>();
                             CompressHuff1.ListaNodos = new ArrayList<>();
-                            generarProbabilidades(CompressHuff1.file);
-                            CompressHuff1.ListaNodosConCodigos = CompressHuff1.arbol.CreacionArbolFinal(CompressHuff1.ListaNodos);
                         }
+                        generarProbabilidades(CompressHuff1.file);
+                        CompressHuff1.ListaNodosConCodigos = CompressHuff1.arbol.CreacionArbolFinal(CompressHuff1.ListaNodos);
+                        CompressHuffResult.txtBinario = crearBinario(readTextFromUri(CompressHuff1.file));
+                        CompressHuffResult.txtAscii = textoToAscii(CompressHuffResult.txtBinario);
+                        CompressHuffResult.file1 = CompressHuff1.file;
+                        CompressHuffResult.arbol = CompressHuff1.arbol;
+                        CompressHuffResult.ListaNodosConCodigos = CompressHuff1.ListaNodosConCodigos;
+                        CompressHuffResult.cerosExtra = CompressHuff1.cerosExtra;
+                        borrarCampos();
+                        finish();
+                        startActivity(new Intent(CompressHuff1.this, CompressHuffResult.class));
                     }catch (Exception e){
                         e.printStackTrace();
                     }
@@ -140,9 +136,10 @@ public class CompressHuff1 extends AppCompatActivity {
         InputStream input = getContentResolver().openInputStream(uri);
         BufferedReader reader = new BufferedReader(new InputStreamReader(input));
         StringBuilder stringbuilder = new StringBuilder();
-        String line;
-        while((line = reader.readLine()) != null){
-            stringbuilder.append(line);
+        int line = 0;
+        while ((line = reader.read()) != -1) {
+            char val = (char)line;
+            stringbuilder.append(val);
         }
         input.close();
         reader.close();
@@ -154,8 +151,8 @@ public class CompressHuff1 extends AppCompatActivity {
             char[] txt = texto.toCharArray();
             for (int i = 0; i < txt.length; i++) {
                 if (!CompressHuff1.ListaCaracteres.contains(txt[i])) {
-                    double cantCar = contarCaracteres(txt[i], txt);
-                    double prob = cantCar / (double) txt.length;
+                    float cantCar = contarCaracteres(txt[i], txt);
+                    float prob = cantCar / (float) txt.length;
                     NodoHuffman nodo = new NodoHuffman();
                     nodo.setCaracter(txt[i]);
                     nodo.setProbabilidad(prob);
@@ -216,6 +213,9 @@ public class CompressHuff1 extends AppCompatActivity {
                 for(int i = 0; i < cerosExtra; i++){
                     txt = "0" + txt;
                 }
+            }
+            else{
+                cerosExtra = 0;
             }
             return txt;
         }

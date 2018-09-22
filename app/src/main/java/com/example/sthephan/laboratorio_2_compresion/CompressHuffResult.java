@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.ParcelFileDescriptor;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
@@ -14,6 +15,9 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -27,7 +31,9 @@ public class CompressHuffResult extends AppCompatActivity {
     @BindView(R.id.labelContenido)
     TextView labelContenido;
 
-    public static Uri file;
+    private static Charset UTF8 = Charset.forName("UTF-8");
+    public static Uri file1;
+    public static Uri file2;
     public static ArrayList<Character> ListaCaracteres = new ArrayList<>();
     public static ArrayList<NodoHuffman> ListaNodos = new ArrayList<>();
     public static ArrayList<NodoHuffman> ListaNodosConCodigos = new ArrayList<>();
@@ -47,13 +53,58 @@ public class CompressHuffResult extends AppCompatActivity {
         setContentView(R.layout.activity_compress_huff_result);
         ButterKnife.bind(this);
         labelContenido.setMovementMethod(new ScrollingMovementMethod());
-        String[] prueba = CompressHuffResult.file.getPath().split("/");
+        labelBinario.setMovementMethod(new ScrollingMovementMethod());
+        String[] prueba = CompressHuffResult.file1.getPath().split("/");
         fileName = prueba[prueba.length - 1].replace(".txt", "");
         String prueba2 = prueba[prueba.length - 1].replace(".txt", ".huff");
         labelNombre.setText(prueba2);
         labelContenido.setText(txtAscii);
         labelBinario.setText(txtBinario);
-        filePath = CompressHuffResult.file.getPath().replace(prueba[prueba.length - 1], prueba2);
+        filePath = CompressHuffResult.file1.getPath().replace(prueba[prueba.length - 1], prueba2);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1234 && resultCode == RESULT_OK && data.getData().getPath().contains(".huff")) {
+            try{
+                Uri selectedFile = data.getData();
+                CompressHuffResult.file2 = selectedFile;
+                ParcelFileDescriptor file = this.getContentResolver().openFileDescriptor(selectedFile, "w");
+                FileOutputStream fos = new FileOutputStream(file.getFileDescriptor());
+                Writer wr = new OutputStreamWriter(fos, UTF8);
+                String textContent = createTextForFile();
+                wr.write(textContent);
+                wr.flush();
+                wr.close();
+                fos.close();
+                file.close();
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        } else if (resultCode == RESULT_CANCELED) {
+            Toast message = Toast.makeText(getApplicationContext(), "Por favor seleccione un archivo para continuar con la compresion", Toast.LENGTH_LONG);
+            message.show();
+        }
+        else if (!data.getData().getPath().contains(".huff")){
+            Toast message = Toast.makeText(getApplicationContext(), "Por favor utilice la extension .huff para guardar el archivo comprimido", Toast.LENGTH_LONG);
+            message.show();
+        }
+        String[] path = CompressHuffResult.file2.getPath().split("/");
+        File test2 = new File(path[path.length - 1]);
+        if (test2.exists()) {
+            Toast message = Toast.makeText(getApplicationContext(), "El archivo se a creado exitosamente", Toast.LENGTH_LONG);
+            message.show();
+            borrarTodo();
+            finish();
+            startActivity(new Intent(CompressHuffResult.this, MainActivity.class));
+        } else {
+            Toast message = Toast.makeText(getApplicationContext(), "El archivo no existe", Toast.LENGTH_LONG);
+            message.show();
+            borrarTodo();
+            finish();
+            startActivity(new Intent(CompressHuffResult.this, MainActivity.class));
+        }
     }
 
     @Override
@@ -75,41 +126,11 @@ public class CompressHuffResult extends AppCompatActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btnGuardar:
-                /*Context context = getApplicationContext();
-                File path = context.getExternalFilesDir(null);
-                if (null == path) {
-                    path = context.getFilesDir();
-                }
-                String[] pr = CompressHuffResult.file.getPath().split("/");
-                String[] pr2 = pr[2].split(":");
-                String pt = Environment.getExternalStorageDirectory().toString().replace("0", pr2[0]);
-                File Dir = new File(path,labelNombre.getText().toString());*/
-                File root = new File(Environment.getExternalStorageDirectory(), "Documentos");
-                root.mkdirs();
-                File archivoHuff = new File(root, labelNombre.getText().toString());
-                try {
-                    if (archivoHuff.exists()) {
-                        archivoHuff.delete();
-                    }
-                    FileOutputStream fos = new FileOutputStream(archivoHuff, true);
-                    fos.write(createTextForFile().getBytes());
-                    fos.flush();
-                    fos.close();
-                    archivoHuff.createNewFile();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                if (archivoHuff.exists()) {
-                    Toast message = Toast.makeText(getApplicationContext(), "El archivo se a creado exitosamente", Toast.LENGTH_LONG);
-                    message.show();
-                    finish();
-                    startActivity(new Intent(CompressHuffResult.this, MainActivity.class));
-                } else {
-                    Toast message = Toast.makeText(getApplicationContext(), "El archivo no existe", Toast.LENGTH_LONG);
-                    message.show();
-                    finish();
-                    startActivity(new Intent(CompressHuffResult.this, MainActivity.class));
-                }
+                Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("*/*");
+                intent.putExtra(Intent.EXTRA_TITLE, labelNombre.getText().toString());
+                startActivityForResult(intent, 1234);
                 break;
             case R.id.btnBorrar:
                 Toast message = Toast.makeText(getApplicationContext(), "El archivo se a borrado exitosamente", Toast.LENGTH_LONG);
@@ -126,7 +147,7 @@ public class CompressHuffResult extends AppCompatActivity {
         CompressHuffResult.cerosExtra = 0;
         CompressHuffResult.ListaNodosConCodigos = new ArrayList<>();
         CompressHuffResult.ListaNodos = new ArrayList<>();
-        CompressHuffResult.file = null;
+        CompressHuffResult.file1 = null;
         CompressHuffResult.arbol = new ArbolHuffman();
         CompressHuffResult.txtBinario = null;
         CompressHuffResult.fileName = null;
@@ -137,7 +158,7 @@ public class CompressHuffResult extends AppCompatActivity {
     public String createTextForFile() {
         String txtArchivo = "";
         for (int i = 0; i < CompressHuffResult.ListaNodosConCodigos.size(); i++) {
-            txtArchivo += CompressHuffResult.ListaNodosConCodigos.get(i).getCaracter() + "#~#" + Double.toString(CompressHuffResult.ListaNodosConCodigos.get(i).getProbabilidad());
+            txtArchivo += CompressHuffResult.ListaNodosConCodigos.get(i).getCaracter() + "#~#" + Float.toString(CompressHuffResult.ListaNodosConCodigos.get(i).getProbabilidad());
             if (i != CompressHuffResult.ListaNodosConCodigos.size() - 1) {
                 txtArchivo += "/¬/";
             }

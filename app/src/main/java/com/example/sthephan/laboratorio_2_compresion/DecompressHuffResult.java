@@ -3,8 +3,10 @@ package com.example.sthephan.laboratorio_2_compresion;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.ParcelFileDescriptor;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
@@ -13,6 +15,9 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.Charset;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,8 +30,10 @@ public class DecompressHuffResult extends AppCompatActivity {
     @BindView(R.id.labelContenido)
     TextView labelContenido;
 
+    private static Charset UTF8 = Charset.forName("UTF-8");
     public static String txtDescompresion;
     public static String nombreArchivo;
+    public static Uri file;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,37 +45,58 @@ public class DecompressHuffResult extends AppCompatActivity {
         labelNombre.setText(DecompressHuffResult.nombreArchivo);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 12345 && resultCode == RESULT_OK && data.getData().getPath().contains(".txt")) {
+            try{
+                Uri selectedFile = data.getData();
+                DecompressHuffResult.file = selectedFile;
+                ParcelFileDescriptor file = this.getContentResolver().openFileDescriptor(selectedFile, "w");
+                FileOutputStream fos = new FileOutputStream(file.getFileDescriptor());
+                Writer wr = new OutputStreamWriter(fos, UTF8);
+                String textContent = DecompressHuffResult.txtDescompresion;
+                wr.write(textContent);
+                wr.flush();
+                wr.close();
+                fos.close();
+                file.close();
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        } else if (resultCode == RESULT_CANCELED) {
+            Toast message = Toast.makeText(getApplicationContext(), "Por favor seleccione un archivo para continuar con la compresion", Toast.LENGTH_LONG);
+            message.show();
+        }
+        else if (!data.getData().getPath().contains(".huff")){
+            Toast message = Toast.makeText(getApplicationContext(), "Por favor utilice la extension .huff para guardar el archivo comprimido", Toast.LENGTH_LONG);
+            message.show();
+        }
+        String[] path = DecompressHuffResult.file.getPath().split("/");
+        File test2 = new File(path[path.length - 1]);
+        if (test2.exists()){
+            Toast message = Toast.makeText(getApplicationContext(), "El archivo se a creado exitosamente", Toast.LENGTH_LONG);
+            message.show();
+            finish();
+            startActivity(new Intent(DecompressHuffResult.this, MainActivity.class));
+        }
+        else{
+            Toast message = Toast.makeText(getApplicationContext(), "El archivo no existe", Toast.LENGTH_LONG);
+            message.show();
+            finish();
+            startActivity(new Intent(DecompressHuffResult.this, MainActivity.class));
+        }
+    }
+
     @OnClick({R.id.btnGuardar, R.id.btnBorrar})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btnGuardar:
-                File root = new File(Environment.getExternalStorageDirectory(), "Documentos");
-                root.mkdirs();
-                File archivoHuff = new File(root, labelNombre.getText().toString() + "Descomprimido.txt");
-                try{
-                    if(archivoHuff.exists()){
-                        archivoHuff.delete();
-                    }
-                    FileOutputStream fos = new FileOutputStream(archivoHuff, true);
-                    fos.write(DecompressHuffResult.txtDescompresion.getBytes());
-                    fos.flush();
-                    fos.close();
-                    archivoHuff.createNewFile();
-                }catch(Exception e){
-                    e.printStackTrace();
-                }
-                if (archivoHuff.exists()){
-                    Toast message = Toast.makeText(getApplicationContext(), "El archivo se a creado exitosamente", Toast.LENGTH_LONG);
-                    message.show();
-                    finish();
-                    startActivity(new Intent(DecompressHuffResult.this, MainActivity.class));
-                }
-                else{
-                    Toast message = Toast.makeText(getApplicationContext(), "El archivo no existe", Toast.LENGTH_LONG);
-                    message.show();
-                    finish();
-                    startActivity(new Intent(DecompressHuffResult.this, MainActivity.class));
-                }
+                Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("*/*");
+                intent.putExtra(Intent.EXTRA_TITLE, DecompressHuffResult.nombreArchivo.concat("Descomprimido.txt"));
+                startActivityForResult(intent, 12345);
                 break;
             case R.id.btnBorrar:
                 Toast message = Toast.makeText(getApplicationContext(), "El archivo se a borrado exitosamente", Toast.LENGTH_LONG);

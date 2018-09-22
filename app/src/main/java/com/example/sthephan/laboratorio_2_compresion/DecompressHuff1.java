@@ -15,6 +15,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -28,6 +30,7 @@ public class DecompressHuff1 extends AppCompatActivity {
     @BindView(R.id.labelContenido)
     TextView labelContenido;
 
+    private static Charset UTF8 = Charset.forName("UTF-8");
     public static Uri file;
     public static ArrayList<NodoHuffman> ListaNodos = new ArrayList<>();
     public static ArrayList<NodoHuffman> ListaNodosConCodigo = new ArrayList<>();
@@ -60,11 +63,12 @@ public class DecompressHuff1 extends AppCompatActivity {
 
     private String readTextFromUri(Uri uri) throws IOException {
         InputStream input = getContentResolver().openInputStream(uri);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(input, UTF8));
         StringBuilder stringbuilder = new StringBuilder();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            stringbuilder.append(line);
+        int line = 0;
+        while ((line = reader.read()) != -1) {
+            char val = (char)line;
+            stringbuilder.append(val);
         }
         input.close();
         reader.close();
@@ -142,7 +146,7 @@ public class DecompressHuff1 extends AppCompatActivity {
             String[] probabilidades = tablaProb[i].split("#~#");
             NodoHuffman nuevo = new NodoHuffman();
             nuevo.setCaracter(probabilidades[0].charAt(0));
-            nuevo.setProbabilidad(Double.parseDouble(probabilidades[1]));
+            nuevo.setProbabilidad(Float.parseFloat(probabilidades[1]));
             DecompressHuff1.ListaNodos.add(nuevo);
         }
         DecompressHuff1.Salto = Integer.parseInt(tablas[1]);
@@ -151,22 +155,33 @@ public class DecompressHuff1 extends AppCompatActivity {
 
     private void DescompresionFinal() throws IOException{
         obtenerTabla(DecompressHuff1.file);
+<<<<<<< HEAD
         DecompressHuff1.ListaNodosConCodigo = new ArrayList<>();
         arbol2.retornar = new ArrayList<>();
         DecompressHuff1.ListaNodosConCodigo = DecompressHuff1.arbol2.CreacionArbolFinal(DecompressHuff1.ListaNodos);
+=======
+        ArrayList<NodoHuffman> temp = new ArrayList<>();
+        for (NodoHuffman n: DecompressHuff1.ListaNodos) {
+            temp.add(n);
+        }
+        if(DecompressHuff1.ListaNodosConCodigo.size() == 0){
+            DecompressHuff1.ListaNodosConCodigo = DecompressHuff1.arbol.CreacionArbolFinal(temp);
+        }
+>>>>>>> EmpezandoFase2
         String texto = Descomprimir(DecompressHuff1.Texto);
         String[] pr = DecompressHuff1.file.getPath().split("/");
         DecompressHuffResult.txtDescompresion = texto;
         DecompressHuffResult.nombreArchivo = pr[pr.length - 1].replace(".huff", "");
+        borrarTodo();
         finish();
         startActivity(new Intent(DecompressHuff1.this, DecompressHuffResult.class));
     }
 
     private String Descomprimir(String texto){
-        char[] txt = extraerBinarioDeAscii(texto).toCharArray();
+        char[] txt = extraerBinarioDeAscii(texto).substring(DecompressHuff1.Salto).toCharArray();
         String caracter = "";
         String TextoDesc = "";
-        for (int i = DecompressHuff1.Salto; i < txt.length; i++){
+        for (int i = 0; i < txt.length; i++){
             caracter += txt[i];
             int j = 0;
             boolean existe = false;
@@ -180,12 +195,6 @@ public class DecompressHuff1 extends AppCompatActivity {
                     j++;
                 }
             }
-            /*for (int j = 0; j < DecompressHuff1.ListaNodos.size(); j++){
-                if (DecompressHuff1.ListaNodos.get(j).getCodigo().equals(caracter)){
-                    TextoDesc += caracter;
-                    caracter = "";
-                }
-            }*/
         }
         return TextoDesc;
     }
@@ -203,5 +212,14 @@ public class DecompressHuff1 extends AppCompatActivity {
             txtEnBinario += asciiABinario;
         }
         return txtEnBinario;
+    }
+
+    public void borrarTodo(){
+        DecompressHuff1.file = null;
+        DecompressHuff1.Salto = 0;
+        DecompressHuff1.Texto = null;
+        DecompressHuff1.arbol = new ArbolHuffman();
+        DecompressHuff1.ListaNodos = new ArrayList<>();
+        DecompressHuff1.ListaNodosConCodigo = new ArrayList<>();
     }
 }
