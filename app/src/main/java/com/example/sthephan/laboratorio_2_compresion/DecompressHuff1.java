@@ -15,6 +15,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -28,13 +30,13 @@ public class DecompressHuff1 extends AppCompatActivity {
     @BindView(R.id.labelContenido)
     TextView labelContenido;
 
+    private static Charset UTF8 = Charset.forName("UTF-8");
     public static Uri file;
     public static ArrayList<NodoHuffman> ListaNodos = new ArrayList<>();
     public static ArrayList<NodoHuffman> ListaNodosConCodigo = new ArrayList<>();
     public static int Salto;
     public static String Texto;
     public static ArbolHuffman arbol = new ArbolHuffman();
-    public static ArrayList<NodoHuffman> ListaNodosConCodigoOriginal = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,11 +63,12 @@ public class DecompressHuff1 extends AppCompatActivity {
 
     private String readTextFromUri(Uri uri) throws IOException {
         InputStream input = getContentResolver().openInputStream(uri);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(input, UTF8));
         StringBuilder stringbuilder = new StringBuilder();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            stringbuilder.append(line);
+        int line = 0;
+        while ((line = reader.read()) != -1) {
+            char val = (char)line;
+            stringbuilder.append(val);
         }
         input.close();
         reader.close();
@@ -176,9 +179,9 @@ public class DecompressHuff1 extends AppCompatActivity {
             caracter += txt[i];
             int j = 0;
             boolean existe = false;
-            while (j < DecompressHuff1.ListaNodosConCodigoOriginal.size() && !existe){
-                if (DecompressHuff1.ListaNodosConCodigoOriginal.get(j).getCodigo().equals(caracter)){
-                    TextoDesc += DecompressHuff1.ListaNodosConCodigoOriginal.get(j).getCaracter();
+            while (j < DecompressHuff1.ListaNodosConCodigo.size() && !existe){
+                if (DecompressHuff1.ListaNodosConCodigo.get(j).getCodigo().equals(caracter)){
+                    TextoDesc += DecompressHuff1.ListaNodosConCodigo.get(j).getCaracter();
                     caracter = "";
                     existe = true;
                 }
@@ -186,49 +189,8 @@ public class DecompressHuff1 extends AppCompatActivity {
                     j++;
                 }
             }
-            /*for (int j = 0; j < DecompressHuff1.ListaNodos.size(); j++){
-                if (DecompressHuff1.ListaNodos.get(j).getCodigo().equals(caracter)){
-                    TextoDesc += caracter;
-                    caracter = "";
-                }
-            }*/
         }
         return TextoDesc;
-    }
-
-    private String Descomprimir2(String texto){
-        char[] txt = texto.substring(DecompressHuff1.Salto).toCharArray();
-        NodoHuffman nod = DecompressHuff1.arbol.getNodoRaiz();
-        boolean hoja = false;
-        boolean fin = false;
-        int j = 0;
-        String caracter = null;
-        while(!fin){
-            while(!hoja){
-                if((nod.getHijoIzquierdo() != null) || (nod.getHijoDerecho() != null)){
-                    if(txt[j] == '0'){
-                        nod = nod.getHijoIzquierdo();
-                        j++;
-                    }
-                    else{
-                        nod = nod.getHijoDerecho();
-                        j++;
-                    }
-                }
-                else{
-                    caracter += nod.getCaracter();
-                    nod = DecompressHuff1.arbol.getNodoRaiz();
-                    hoja = true;
-                }
-            }
-            if(j >= txt.length - 1){
-                fin = true;
-            }
-            else{
-                hoja =false;
-            }
-        }
-        return caracter;
     }
 
     public String extraerBinarioDeAscii(String codigoAscii){

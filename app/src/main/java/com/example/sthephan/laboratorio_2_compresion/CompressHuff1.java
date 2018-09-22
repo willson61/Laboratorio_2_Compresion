@@ -73,10 +73,9 @@ public class CompressHuff1 extends AppCompatActivity {
                         CompressHuff1.ListaNodosConCodigos = CompressHuff1.arbol.CreacionArbolFinal(CompressHuff1.ListaNodos);
                         CompressHuffResult.txtBinario = crearBinario(readTextFromUri(CompressHuff1.file));
                         CompressHuffResult.txtAscii = textoToAscii(CompressHuffResult.txtBinario);
-                        CompressHuffResult.file = CompressHuff1.file;
+                        CompressHuffResult.file1 = CompressHuff1.file;
                         CompressHuffResult.arbol = CompressHuff1.arbol;
                         CompressHuffResult.ListaNodosConCodigos = CompressHuff1.ListaNodosConCodigos;
-                        DecompressHuff1.ListaNodosConCodigoOriginal = CompressHuff1.ListaNodosConCodigos;
                         CompressHuffResult.cerosExtra = CompressHuff1.cerosExtra;
                         borrarCampos();
                         finish();
@@ -137,9 +136,10 @@ public class CompressHuff1 extends AppCompatActivity {
         InputStream input = getContentResolver().openInputStream(uri);
         BufferedReader reader = new BufferedReader(new InputStreamReader(input));
         StringBuilder stringbuilder = new StringBuilder();
-        String line;
-        while((line = reader.readLine()) != null){
-            stringbuilder.append(line);
+        int line = 0;
+        while ((line = reader.read()) != -1) {
+            char val = (char)line;
+            stringbuilder.append(val);
         }
         input.close();
         reader.close();

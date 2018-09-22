@@ -4,12 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class ArbolHuffman {
-    public static NodoHuffman getNodoRaiz() {
-        return nodoRaiz;
-    }
 
     public static NodoHuffman nodoRaiz;
-    //public static NodoHuffman nodoAux;
     public static String Num = "";
     public static ArrayList<NodoHuffman> retornar = new ArrayList<>();
 
