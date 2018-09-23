@@ -1,12 +1,15 @@
 package com.example.sthephan.laboratorio_2_compresion;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.ParcelFileDescriptor;
+import android.provider.OpenableColumns;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
@@ -17,6 +20,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 
@@ -90,11 +94,10 @@ public class CompressHuffResult extends AppCompatActivity {
             Toast message = Toast.makeText(getApplicationContext(), "Por favor utilice la extension .huff para guardar el archivo comprimido", Toast.LENGTH_LONG);
             message.show();
         }
-        String[] path = CompressHuffResult.file2.getPath().split("/");
-        File test2 = new File(path[path.length - 1]);
-        if (test2.exists()) {
+        if (checkURIResource(CompressHuffResult.this.getApplicationContext(), CompressHuffResult.file2)) {
             Toast message = Toast.makeText(getApplicationContext(), "El archivo se a creado exitosamente", Toast.LENGTH_LONG);
             message.show();
+            escribirAHistorial(crearCompression());
             borrarTodo();
             finish();
             startActivity(new Intent(CompressHuffResult.this, MainActivity.class));
@@ -105,6 +108,11 @@ public class CompressHuffResult extends AppCompatActivity {
             finish();
             startActivity(new Intent(CompressHuffResult.this, MainActivity.class));
         }
+    }
+
+    public static boolean checkURIResource(Context context, Uri uri) {
+        Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
+        return (cursor != null && cursor.moveToFirst());
     }
 
     @Override
@@ -167,5 +175,58 @@ public class CompressHuffResult extends AppCompatActivity {
         txtArchivo += cerosExtra;
         txtArchivo += "%~%" + CompressHuffResult.txtAscii;
         return txtArchivo;
+    }
+
+    public Compress crearCompression(){
+        String[] path = CompressHuffResult.file1.getPath().split("/");
+        String[] path2 = CompressHuffResult.file2.getPath().split("/");
+        Long file1Size;
+        Long file2Size;
+        Cursor returnCursor1 = getContentResolver().query(CompressHuffResult.file1, null, null, null, null);
+        int sizeIndex1 = returnCursor1.getColumnIndex(OpenableColumns.SIZE);
+        returnCursor1.moveToFirst();
+        file1Size = returnCursor1.getLong(sizeIndex1);
+        Cursor returnCursor2 = getContentResolver().query(CompressHuffResult.file2, null, null, null, null);
+        int sizeIndex2 = returnCursor2.getColumnIndex(OpenableColumns.SIZE);
+        returnCursor2.moveToFirst();
+        file2Size = returnCursor2.getLong(sizeIndex2);
+        Float raz = (float) file2Size/file1Size;
+        Float fac = (float) file1Size/file2Size;
+        Compress c = new Compress(path[path.length - 1], path2[path2.length - 1], CompressHuffResult.file2.getPath(), raz, fac, 0, "Huffman");
+        return c;
+    }
+
+    public void escribirAHistorial(Compress com){
+        String texto = "";
+        String div = "#~#";
+        String fin = "%~%";
+        texto += com.getNombreOriginal();
+        texto += div;
+        texto += com.getNombreComprimido();
+        texto += div;
+        texto += com.getRutaArchivoComprimido();
+        texto += div;
+        texto += Float.toString(com.getRazonCompresion());
+        texto += div;
+        texto += Float.toString(com.getFactorCompresion());
+        texto += div;
+        texto += Float.toString(com.getPorcentajeReduccion());
+        texto += div;
+        texto += com.getTipoCompresion();
+        texto += fin;
+        File root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
+        root.mkdirs();
+        File historial = new File(root, "HistorialCompresion.txt");
+        try{
+            if(!historial.exists()){
+                historial.createNewFile();
+            }
+            FileOutputStream fos = new FileOutputStream(historial, true);
+            fos.write(texto.toString().getBytes());
+            fos.flush();
+            fos.close();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 }

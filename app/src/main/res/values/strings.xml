@@ -9,4 +9,15 @@
     <string name="guardar">Guardar</string>
     <string name="borrar">Borrar</string>
     <string name="bienvenido_al_laboratorio_de_compresion_y_descompresion">Bienvenido al Laboratorio de Compresion y Descompresion</string>
+    <string name="ruta_archivo_comprimido">Ruta Archivo Comprimido:</string>
+    <string name="nombre_txt">Nombre txt</string>
+    <string name="arrow"><![CDATA[----->]]></string>
+    <string name="nombre_huff">Nombre huff</string>
+    <string name="razon_de_compresion">Razon de Compresion:</string>
+    <string name="factor_de_compresion">Factor de Compresion:</string>
+    <string name="porcentaje_de_reduccion">Porcentaje de Reduccion:</string>
+    <string name="tipo_de_compresion">Tipo de Compresion:</string>
+    <string name="codificacion_binaria">Codificacion Binaria:</string>
+    <string name="codificacion_ascii">Codificacion Ascii:</string>
+    <string name="mi_historial_de_compresiones">Mi Historial de Compresiones</string>
 </resources>

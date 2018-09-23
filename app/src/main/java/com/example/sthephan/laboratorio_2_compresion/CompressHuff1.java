@@ -174,20 +174,6 @@ public class CompressHuff1 extends AppCompatActivity {
             return cont;
         }
 
-        public String pruebaProbabilidades () {
-            if((CompressHuff1.ListaNodosConCodigos.size() != 0)){
-                CompressHuff1.ListaNodosConCodigos = new ArrayList<>();
-                CompressHuff1.arbol = new ArbolHuffman();
-                labelContenido.setText(null);
-            }
-            CompressHuff1.ListaNodosConCodigos = CompressHuff1.arbol.CreacionArbolFinal(CompressHuff1.ListaNodos);
-            String st = "";
-            for (int i = 0; i < CompressHuff1.ListaNodosConCodigos.size(); i++) {
-                st = st.concat(CompressHuff1.ListaNodosConCodigos.get(i).getCaracter() + " = " + CompressHuff1.ListaNodosConCodigos.get(i).getCodigo() + "\n");
-            }
-            return st;
-        }
-
         public void borrarCampos(){
             labelNombre.setText(null);
             labelContenido.setText(null);

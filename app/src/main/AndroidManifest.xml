@@ -3,6 +3,7 @@
     package="com.example.sthephan.laboratorio_2_compresion">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -20,7 +21,8 @@
         <activity android:name=".DecompressHuff1" />
         <activity android:name=".CompressHuff1" />
         <activity android:name=".CompressHuffResult" />
-        <activity android:name=".DecompressHuffResult"></activity>
+        <activity android:name=".DecompressHuffResult" />
+        <activity android:name=".CompressHistory"></activity>
     </application>
 
 </manifest>

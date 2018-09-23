@@ -1,8 +1,10 @@
 package com.example.sthephan.laboratorio_2_compresion;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -73,8 +75,8 @@ public class DecompressHuffResult extends AppCompatActivity {
             message.show();
         }
         String[] path = DecompressHuffResult.file.getPath().split("/");
-        File test2 = new File(path[path.length - 1]);
-        if (test2.exists()){
+        File test2 = getBaseContext().getFileStreamPath(path[path.length - 1]);
+        if (checkURIResource(DecompressHuffResult.this.getApplicationContext(), DecompressHuffResult.file)){
             Toast message = Toast.makeText(getApplicationContext(), "El archivo se a creado exitosamente", Toast.LENGTH_LONG);
             message.show();
             finish();
@@ -86,6 +88,11 @@ public class DecompressHuffResult extends AppCompatActivity {
             finish();
             startActivity(new Intent(DecompressHuffResult.this, MainActivity.class));
         }
+    }
+
+    public static boolean checkURIResource(Context context, Uri uri) {
+        Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
+        return (cursor != null && cursor.moveToFirst());
     }
 
     @OnClick({R.id.btnGuardar, R.id.btnBorrar})

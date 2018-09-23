@@ -9,4 +9,7 @@
     <item
         android:id="@+id/opDescompresionHuff"
         android:title="@string/descompresion_huffman" />
+    <item
+        android:id="@+id/opCompressHistory"
+        android:title="Historial" />
 </menu>

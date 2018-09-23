@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/labelNombreOriginal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/nombre_txt"
+        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/labelGrafico1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/labelNombreOriginal"
+        android:text="@string/arrow"
+        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+        android:textSize="15sp"/>
+
+    <TextView
+        android:id="@+id/labelNombreComprimido"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/labelGrafico1"
+        android:text="@string/nombre_huff"
+        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
+        android:textSize="15sp"/>
+
+    <TextView
+        android:id="@+id/labelGrafico2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/labelNombreOriginal"
+        android:text="@string/ruta_archivo_comprimido"
+        android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
+        android:textSize="15sp"/>
+
+    <TextView
+        android:id="@+id/labelGrafico3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/labelRuta"
+        android:text="@string/razon_de_compresion"
+        android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/labelRuta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/labelGrafico2"
+        android:layout_alignParentStart="true"
+        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/labelRazonCompress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/labelGrafico3"
+        android:layout_toEndOf="@+id/labelGrafico3"
+        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/labelGrafico4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/labelGrafico3"
+        android:text="@string/factor_de_compresion"
+        android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
+        android:textSize="15sp"/>
+
+    <TextView
+        android:id="@+id/labelFactorCompress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/labelGrafico3"
+        android:layout_toEndOf="@+id/labelGrafico4"
+        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+        android:textSize="15sp"/>
+
+    <TextView
+        android:id="@+id/labelGrafico5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/labelGrafico4"
+        android:text="@string/porcentaje_de_reduccion"
+        android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
+        android:textSize="15sp"/>
+
+    <TextView
+        android:id="@+id/labelPorcentajeReducc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/labelGrafico4"
+        android:layout_toEndOf="@+id/labelGrafico5"
+        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+        android:textSize="15sp"/>
+
+    <TextView
+        android:id="@+id/labelGrafico6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/labelGrafico5"
+        android:text="@string/tipo_de_compresion"
+        android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
+        android:textSize="15sp"/>
+
+    <TextView
+        android:id="@+id/labelTipoCompress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/labelGrafico5"
+        android:layout_toEndOf="@+id/labelGrafico6"
+        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+        android:textSize="15sp"/>
+</RelativeLayout>

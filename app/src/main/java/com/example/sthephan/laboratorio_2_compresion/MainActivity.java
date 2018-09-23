@@ -60,6 +60,10 @@ public class MainActivity extends AppCompatActivity {
                 finish();
                 startActivity(new Intent(MainActivity.this, DecompressHuff1.class));
                 return true;
+            case R.id.opCompressHistory:
+                finish();
+                startActivity(new Intent(MainActivity.this, CompressHistory.class));
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
