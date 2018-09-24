@@ -10,6 +10,12 @@
         android:id="@+id/opDescompresionHuff"
         android:title="@string/descompresion_huffman" />
     <item
+        android:id="@+id/opCompresionLZW"
+        android:title="Compresion LZW" />
+    <item
+        android:id="@+id/opDescompresionLZW"
+        android:title="Descompresion LZW" />
+    <item
         android:id="@+id/opCompressHistory"
         android:title="Historial" />
 </menu>

@@ -22,7 +22,11 @@
         <activity android:name=".CompressHuff1" />
         <activity android:name=".CompressHuffResult" />
         <activity android:name=".DecompressHuffResult" />
-        <activity android:name=".CompressHistory"></activity>
+        <activity android:name=".CompressHistory" />
+        <activity android:name=".CompressLZW1" />
+        <activity android:name=".DecompressLZW1" />
+        <activity android:name=".CompressLZWResult" />
+        <activity android:name=".DecompressLZWResult"></activity>
     </application>
 
 </manifest>

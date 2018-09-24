@@ -60,6 +60,14 @@ public class MainActivity extends AppCompatActivity {
                 finish();
                 startActivity(new Intent(MainActivity.this, DecompressHuff1.class));
                 return true;
+            case R.id.opCompresionLZW:
+                finish();
+                startActivity(new Intent(MainActivity.this, CompressLZW1.class));
+                return true;
+            case R.id.opDescompresionLZW:
+                finish();
+                startActivity(new Intent(MainActivity.this, DecompressLZW1.class));
+                return true;
             case R.id.opCompressHistory:
                 finish();
                 startActivity(new Intent(MainActivity.this, CompressHistory.class));

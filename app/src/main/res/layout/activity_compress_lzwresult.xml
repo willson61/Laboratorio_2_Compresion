@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CompressLZWResult">
+
+    <TextView
+        android:id="@+id/labelNombre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="12dp" />
+
+    <TextView
+        android:id="@+id/labelContenido"
+        android:layout_width="322dp"
+        android:layout_height="135dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/labelNombre"
+        android:layout_marginTop="60dp"
+        android:scrollbars="vertical" />
+
+    <Button
+        android:id="@+id/btnGuardar"
+        style="@android:style/Widget.Button"
+        android:layout_width="125dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/labelNombre"
+        android:layout_marginBottom="68dp"
+        android:background="@color/colorPrimary"
+        android:text="@string/guardar" />
+
+    <Button
+        android:id="@+id/btnBorrar"
+        style="@android:style/Widget.Button"
+        android:layout_width="125dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/btnGuardar"
+        android:layout_marginEnd="40dp"
+        android:background="@color/colorPrimary"
+        android:text="@string/borrar" />
+
+    <TextView
+        android:id="@+id/labelLZW"
+        android:layout_width="323dp"
+        android:layout_height="135dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/labelNombre"
+        android:layout_marginBottom="150dp"
+        android:scrollbars="vertical" />
+
+    <TextView
+        android:id="@+id/labelGrafico2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/labelLZW"
+        android:layout_alignStart="@+id/labelNombre"
+        android:text="@string/codificacion_lzw" />
+
+    <TextView
+        android:id="@+id/labelGrafico1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/labelContenido"
+        android:layout_alignStart="@+id/labelNombre"
+        android:layout_marginBottom="-60dp"
+        android:text="@string/codificacion_ascii" />
+</RelativeLayout>

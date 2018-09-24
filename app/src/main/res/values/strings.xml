@@ -20,4 +20,5 @@
     <string name="codificacion_binaria">Codificacion Binaria:</string>
     <string name="codificacion_ascii">Codificacion Ascii:</string>
     <string name="mi_historial_de_compresiones">Mi Historial de Compresiones</string>
+    <string name="codificacion_lzw">Codificacion LZW:</string>
 </resources>
