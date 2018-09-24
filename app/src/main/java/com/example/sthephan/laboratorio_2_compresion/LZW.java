@@ -9,6 +9,7 @@ public class LZW {
     //public static Dictionary<String, NodoDiccionario> DiccionarioOriginal;
     public static Map<String, NodoDiccionario> DiccionarioOriginal = new HashMap<>();
     public static Map<String, NodoDiccionario> DiccionarioInvverso = new HashMap<>();
+    public  static String DiccionarioO = "";
 
     private static String Comprimir(String texto){
         armarDiccionario(texto);
@@ -36,6 +37,10 @@ public class LZW {
             }
         }
         return output;
+    }
+
+    private static String getDiccionarioO(){
+        return DiccionarioO;
     }
 
     private static String Descomprimir(String texto){
@@ -113,6 +118,7 @@ public class LZW {
                 LZW.DiccionarioOriginal.put(analisis, nodo);
             }
         }
+        LZW.DiccionarioO = caracteres;
 
     }
 
@@ -126,6 +132,12 @@ public class LZW {
 
     public static Map<String, NodoDiccionario> getDiccionarioOriginal() {
         return DiccionarioOriginal;
+    }
+
+    public static void ResetearCampos(){
+        LZW.DiccionarioO = "";
+        LZW.DiccionarioOriginal.clear();
+        LZW.DiccionarioInvverso.clear();
     }
 }
 
