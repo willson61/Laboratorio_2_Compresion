@@ -42,6 +42,7 @@ public class CompressLZWResult extends AppCompatActivity {
     public static Uri file1;
     public static Uri file2;
     public static int cerosExtra;
+    public static int longitudBinario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,6 +148,8 @@ public class CompressLZWResult extends AppCompatActivity {
         txtArchivo += CompressLZWResult.textAscii;
         txtArchivo += "/¬/";
         txtArchivo += cerosExtra;
+        txtArchivo += "/¬/";
+        txtArchivo += longitudBinario;
         return  txtArchivo;
     }
 

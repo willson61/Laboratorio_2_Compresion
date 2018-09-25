@@ -1,5 +1,6 @@
 package com.example.sthephan.laboratorio_2_compresion;
 
+import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,10 +10,12 @@ public class LZW {
     public static Map<String, NodoDiccionario> DiccionarioOriginal = new HashMap<>();
     public static Map<String, NodoDiccionario> DiccionarioInvverso = new HashMap<>();
     public static String DiccionarioO = "";
+    public static int longitudMax;
 
     public static String Comprimir(String texto){
         armarDiccionario(texto);
         Map<String, NodoDiccionario> Diccionario = LZW.DiccionarioOriginal;
+        ArrayList<String> elementos = new ArrayList<>();
         String output = "";
         String input = "";
         String s = "";
@@ -25,7 +28,7 @@ public class LZW {
             if (Diccionario.containsKey(s)) {
                 i++;
             } else {
-                output += Integer.toString(Diccionario.get(s).getIndex());
+                elementos.add(Integer.toString(Diccionario.get(s).getIndex()));
                 s += contenido[i + 1];
                 NodoDiccionario nodo = new NodoDiccionario();
                 nodo.setValue(s);
@@ -35,6 +38,26 @@ public class LZW {
                 i++;
             }
         }
+        int lon = Integer.toBinaryString(Diccionario.size()).length();
+        LZW.longitudMax = lon;
+        for (int x = 0; x < elementos.size(); x++) {
+            int cerosExtra = 0;
+            String val = null;
+            val = Integer.toBinaryString(Integer.parseInt(elementos.get(x)));
+            cerosExtra = lon - val.length() % lon;
+            if(cerosExtra != lon){
+                for(int y = 0; y < cerosExtra; y++){
+                    val = "0" + val;
+                }
+            }
+            else{
+                cerosExtra = 0;
+            }
+            elementos.set(x, val);
+        }
+        for(int z = 0; z<elementos.size(); z++){
+            output += elementos.get(z);
+        }
         return output;
     }
 
@@ -43,7 +66,7 @@ public class LZW {
     }
 
     public static String Descomprimir(String texto, String caracteres, String ceros){
-        String[] archivo = texto.split("/¬/");
+        //String[] archivo = texto.split("/¬/");
         armarDiccioinarioDesc(caracteres);
         int index = LZW.DiccionarioInvverso.size();
         String output = "";

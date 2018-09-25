@@ -30,6 +30,7 @@ public class CompressLZW1 extends AppCompatActivity {
     public static LZW diccionario = new LZW();
     public static Uri file;
     public static int cerosExtra;
+    public static int longitudBinario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,11 +85,13 @@ public class CompressLZW1 extends AppCompatActivity {
             case R.id.btnComprimir:
                 try{
                     String compresion = CompressLZW1.diccionario.Comprimir(readTextFromUri(CompressLZW1.file));
+                    CompressLZW1.longitudBinario = CompressLZW1.diccionario.longitudMax;
                     CompressLZWResult.caracteresOriginales = CompressLZW1.diccionario.DiccionarioO;
                     CompressLZWResult.codigoLZW = compresion;
                     CompressLZWResult.textAscii = textoToAscii(compresion);
                     CompressLZWResult.file1 = CompressLZW1.file;
                     CompressLZWResult.cerosExtra = CompressLZW1.cerosExtra;
+                    CompressLZWResult.longitudBinario = CompressLZW1.longitudBinario;
                     borrarCampos();
                     finish();
                     startActivity(new Intent(CompressLZW1.this, CompressLZWResult.class));
@@ -136,15 +139,32 @@ public class CompressLZW1 extends AppCompatActivity {
         CompressLZW1.file = null;
     }
 
-    public String textoToAscii(String txtBinario){
-        String txtAscii = txtBinario;
+    public String textoToAscii(String txtLZW){
+        cerosExtra = 8 - txtLZW.length() % 8;
+        if(cerosExtra != 8){
+            for(int i = 0; i < cerosExtra; i++){
+                txtLZW = "0" + txtLZW;
+            }
+        }
+        else{
+            cerosExtra = 0;
+        }
+        String txtAscii = "";
+        int cont = 0;
         String ascii = "";
         int num = 0;
-        char txt;
-        for (int i = 0; i < txtBinario.length(); i++) {
-            txt = Character.forDigit(Character.getNumericValue(txtAscii.charAt(i)), 10);
-            ascii += (int)txt;
+        for (int i = 0; i < txtLZW.length(); i++) {
+            cont++;
+            if (cont <= 8) {
+                ascii = ascii + txtLZW.charAt(i);
+                if ((cont == 8)||(i == txtLZW.length() - 1)){
+                    num = Integer.parseInt(ascii,2);
+                    txtAscii += (char)Integer.valueOf(num).intValue();
+                    cont = 0;
+                    ascii = "";
+                }
+            }
         }
-        return ascii;
+        return txtAscii;
     }
 }

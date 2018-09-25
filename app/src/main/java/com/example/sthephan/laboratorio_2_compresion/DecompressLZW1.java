@@ -26,6 +26,7 @@ public class DecompressLZW1 extends AppCompatActivity {
     private static Charset UTF8 = Charset.forName("UTF-8");
     public static Uri file;
     public static LZW diccionario = new LZW();
+    public static int longitudBinario;
     
     @BindView(R.id.labelNombre)
     TextView labelNombre;
@@ -90,7 +91,8 @@ public class DecompressLZW1 extends AppCompatActivity {
                     try{
                         if(DecompressLZW1.file != null){
                             String[] ascii = readTextFromUri(DecompressLZW1.file).split("/¬/");
-                            String texto = DecompressLZW1.diccionario.Descomprimir(extraerLZWDeAscii(ascii[1]), ascii[0], ascii[2]);
+                            DecompressLZW1.longitudBinario = Integer.parseInt(ascii[3]);
+                            String texto = DecompressLZW1.diccionario.Descomprimir(extraerNumDeBinario(extraerBinarioDeAscii(ascii[1]).substring(Integer.parseInt(ascii[2]))), ascii[0], ascii[2]);
                             DecompressLZWResult.textoDescompresion = texto;
                             String[] pr = DecompressLZW1.file.getPath().split("/");
                             DecompressLZWResult.nombreArchivo = pr[pr.length - 1].replace(".lzw", "");
@@ -139,14 +141,32 @@ public class DecompressLZW1 extends AppCompatActivity {
         }
     }
 
-    public String extraerLZWDeAscii(String codigoAscii){
-        String txtEnLZW = "";
-        String txt = null;
+    public String extraerBinarioDeAscii(String codigoAscii){
+        String txtEnBinario = "";
         for (int i = 0; i < codigoAscii.length(); i++){
-            txt = Character.toString(codigoAscii.charAt(i));
-            String asciiALZW = String.valueOf(txt);
-            txtEnLZW += asciiALZW;
+            String asciiABinario = Integer.toBinaryString(codigoAscii.charAt(i));
+            if (asciiABinario.length() % 8 != 0){
+                int cerosRestantes = 8 - asciiABinario.length() % 8;
+                for (int j = 0; j < cerosRestantes; j++){
+                    asciiABinario = "0" + asciiABinario;
+                }
+            }
+            txtEnBinario += asciiABinario;
         }
-        return txtEnLZW;
+        return txtEnBinario;
+    }
+
+    public String extraerNumDeBinario(String codigoBinario){
+        String txt="";
+        String txtLZW = "";
+        for(int i = 0; i < codigoBinario.length(); i++){
+            txt += codigoBinario.charAt(i);
+            if(txt.length() % DecompressLZW1.longitudBinario == 0){
+                int num = Integer.parseInt(txt, 2);
+                txtLZW += num;
+                txt = "";
+            }
+        }
+        return txtLZW;
     }
 }
