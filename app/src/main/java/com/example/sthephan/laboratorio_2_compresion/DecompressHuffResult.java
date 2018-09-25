@@ -71,11 +71,9 @@ public class DecompressHuffResult extends AppCompatActivity {
             message.show();
         }
         else if (!data.getData().getPath().contains(".huff")){
-            Toast message = Toast.makeText(getApplicationContext(), "Por favor utilice la extension .huff para guardar el archivo comprimido", Toast.LENGTH_LONG);
+            Toast message = Toast.makeText(getApplicationContext(), "Por favor utilice la extension .txt para guardar el archivo comprimido", Toast.LENGTH_LONG);
             message.show();
         }
-        String[] path = DecompressHuffResult.file.getPath().split("/");
-        File test2 = getBaseContext().getFileStreamPath(path[path.length - 1]);
         if (checkURIResource(DecompressHuffResult.this.getApplicationContext(), DecompressHuffResult.file)){
             Toast message = Toast.makeText(getApplicationContext(), "El archivo se a creado exitosamente", Toast.LENGTH_LONG);
             message.show();
