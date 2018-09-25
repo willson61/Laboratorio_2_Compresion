@@ -23,13 +23,24 @@ public class LZW {
         int tamano = contenido.length;
         int i = 0;
         int index = LZW.DiccionarioOriginal.size();
+        boolean Final = false;
         while(i < tamano) {
             s += contenido[i];
-            if (Diccionario.containsKey(s)) {
+            //if (Diccionario.containsKey((s += contenido[i+1]) == null)){
+            //    s = s.substring(0, s.length()-1);
+            //    elementos.add(Integer.toString(Diccionario.get(s).getIndex()));
+            //}else{
+            //    s = s.substring(0, s.length()-1);
+            //}
+            if (i == tamano - 1){
+                elementos.add(Integer.toString(Diccionario.get(s).getIndex()));
                 i++;
+            }else if (Diccionario.containsKey(s += contenido[i+1])) {
+                i++;
+                s = s.substring(0, s.length()-1);
             } else {
                 elementos.add(Integer.toString(Diccionario.get(s).getIndex()));
-                s += contenido[i + 1];
+                //s += contenido[i + 1];
                 NodoDiccionario nodo = new NodoDiccionario();
                 nodo.setValue(s);
                 nodo.setIndex(index++);
@@ -37,6 +48,7 @@ public class LZW {
                 s = "";
                 i++;
             }
+
         }
         int lon = Integer.toBinaryString(Diccionario.size()).length();
         LZW.longitudMax = lon;
