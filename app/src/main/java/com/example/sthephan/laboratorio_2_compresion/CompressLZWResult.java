@@ -168,7 +168,7 @@ public class CompressLZWResult extends AppCompatActivity {
         file2Size = returnCursor2.getLong(sizeIndex2);
         Float raz = (float) file2Size/file1Size;
         Float fac = (float) file1Size/file2Size;
-        Compress c = new Compress(path[path.length - 1], path2[path2.length - 1], CompressLZWResult.file2.getPath(), raz, fac, 0, "LZW");
+        Compress c = new Compress(path[path.length - 1], path2[path2.length - 1], CompressLZWResult.file2.getPath(), raz * 100, fac, 1 - (raz * 100), "LZW");
         return c;
     }
 
@@ -212,5 +212,7 @@ public class CompressLZWResult extends AppCompatActivity {
         CompressLZWResult.codigoLZW = null;
         CompressLZWResult.file1 = null;
         CompressLZWResult.file2 = null;
+        CompressLZWResult.cerosExtra = 0;
+        CompressLZWResult.longitudBinario = 0;
     }
 }

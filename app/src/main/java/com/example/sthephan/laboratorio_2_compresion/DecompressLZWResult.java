@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
 import android.support.v7.app.AppCompatActivity;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,6 +40,7 @@ public class DecompressLZWResult extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_decompress_lzwresult);
         ButterKnife.bind(this);
+        labelContenido.setMovementMethod(new ScrollingMovementMethod());
         labelNombre.setText(DecompressLZWResult.nombreArchivo);
         labelContenido.setText(DecompressLZWResult.textoDescompresion);
     }

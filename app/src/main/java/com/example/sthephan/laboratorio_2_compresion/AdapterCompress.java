@@ -87,7 +87,7 @@ public class AdapterCompress extends BaseAdapter{
         holder.nomCompress.setText("  " + holder.c.getNombreComprimido());
         holder.rutaCompress.setText(holder.c.getRutaArchivoComprimido());
         holder.facCompress.setText(" " + String.valueOf(holder.c.getFactorCompresion()));
-        holder.razCompress.setText(" " + String.valueOf(holder.c.getRazonCompresion()));
+        holder.razCompress.setText(" " + String.valueOf(holder.c.getRazonCompresion()) + "%");
         holder.porcReduccion.setText(" " + String.valueOf(holder.c.getPorcentajeReduccion()) + "%");
         holder.tipoCompress.setText(" " + holder.c.getTipoCompresion());
         return v;

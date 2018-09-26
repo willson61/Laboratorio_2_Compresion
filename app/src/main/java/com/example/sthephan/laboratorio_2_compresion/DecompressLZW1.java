@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -98,6 +99,9 @@ public class DecompressLZW1 extends AppCompatActivity {
                             DecompressLZWResult.nombreArchivo = pr[pr.length - 1].replace(".lzw", "");
                             DecompressLZW1.diccionario = new LZW();
                             DecompressLZW1.file = null;
+                            finish();
+                            startActivity(new Intent(DecompressLZW1.this, DecompressLZWResult.class));
+
                         }
                         else{
                             Toast message = Toast.makeText(getApplicationContext(), "Seleccione un archivo para poder descomprimir", Toast.LENGTH_LONG);
@@ -156,14 +160,14 @@ public class DecompressLZW1 extends AppCompatActivity {
         return txtEnBinario;
     }
 
-    public String extraerNumDeBinario(String codigoBinario){
+    public ArrayList<String> extraerNumDeBinario(String codigoBinario){
         String txt="";
-        String txtLZW = "";
+        ArrayList<String> txtLZW = new ArrayList<>();
         for(int i = 0; i < codigoBinario.length(); i++){
             txt += codigoBinario.charAt(i);
             if(txt.length() % DecompressLZW1.longitudBinario == 0){
                 int num = Integer.parseInt(txt, 2);
-                txtLZW += num;
+                txtLZW.add(Integer.toString(num));
                 txt = "";
             }
         }

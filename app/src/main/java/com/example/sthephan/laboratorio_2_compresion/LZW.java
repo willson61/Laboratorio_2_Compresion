@@ -108,27 +108,27 @@ public class LZW {
         return DiccionarioO;
     }
 
-    public static String Descomprimir(String texto, String caracteres, String ceros){
+    public static String Descomprimir(ArrayList<String> texto, String caracteres, String ceros){
         //String[] archivo = texto.split("/¬/");
         armarDiccioinarioDesc(caracteres);
         int index = LZW.DiccionarioInvverso.size();
         String output = "";
         String actual = "";
         String previo = "";
-        char[] contendio = texto.toCharArray();
+        ArrayList<String> contendio = texto;
         int i = 0;
         boolean finarchivo = false;
         while (!finarchivo){
-            if(i == contendio.length - 1){
+            if(i == contendio.size() - 1){
                 finarchivo = true;
             }
             if(i == 0){
-                actual = LZW.DiccionarioInvverso.get(contendio[i]).getValue();
+                actual = LZW.DiccionarioInvverso.get(contendio.get(i)).getValue();
                 output += actual;
                 i++;
             }else {
-                actual = LZW.DiccionarioInvverso.get(contendio[i]).getValue();
-                previo = LZW.DiccionarioInvverso.get(contendio[i]).getValue();
+                actual = LZW.DiccionarioInvverso.get(contendio.get(i)).getValue();
+                previo = LZW.DiccionarioInvverso.get(contendio.get(i - 1)).getValue();
                 output += actual;
                 index++;
                 NodoDiccionario nodo = new NodoDiccionario();
