@@ -192,7 +192,7 @@ public class CompressHuffResult extends AppCompatActivity {
         file2Size = returnCursor2.getLong(sizeIndex2);
         Float raz = (float) file2Size/file1Size;
         Float fac = (float) file1Size/file2Size;
-        Compress c = new Compress(path[path.length - 1], path2[path2.length - 1], CompressHuffResult.file2.getPath(), raz * 100, fac, 1 - (raz * 100), "Huffman");
+        Compress c = new Compress(path[path.length - 1], path2[path2.length - 1], CompressHuffResult.file2.getPath(), (raz * 100), fac, ((1 - raz) * 100), "Huffman");
         return c;
     }
 
