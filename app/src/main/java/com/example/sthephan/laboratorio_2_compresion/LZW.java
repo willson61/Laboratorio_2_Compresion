@@ -2,19 +2,43 @@ package com.example.sthephan.laboratorio_2_compresion;
 
 import java.util.ArrayList;
 import java.util.Dictionary;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class LZW {
     //public static Dictionary<String, NodoDiccionario> DiccionarioOriginal;
-    public static Map<String, NodoDiccionario> DiccionarioOriginal = new HashMap<>();
-    public static Map<String, NodoDiccionario> DiccionarioInvverso = new HashMap<>();
+    public static LinkedHashMap<String, NodoDiccionario> DiccionarioOriginal = new LinkedHashMap<>();
+    public static LinkedHashMap<String, NodoDiccionario> DiccionarioInvverso = new LinkedHashMap<>();
     public static String DiccionarioO = "";
     public static int longitudMax;
 
     public static String Comprimir(String texto){
-        armarDiccionario(texto);
-        Map<String, NodoDiccionario> Diccionario = LZW.DiccionarioOriginal;
+        LinkedHashMap<String, NodoDiccionario> DiccionarioPrueba = new LinkedHashMap<>();
+        char[] cadena = texto.toCharArray();
+        //LinkedHashMap<String, NodoDiccionario> dicprueba = new LinkedHashMap<>();
+        int index = 1;
+        String caracteres = "";
+        for (int i = 0; i < cadena.length; i++){
+            String analisis = "";
+            analisis += cadena[i];
+            if (caracteres.contains(analisis)){
+
+            }else{
+                caracteres += analisis;
+                NodoDiccionario nodo = new NodoDiccionario();
+                nodo.setIndex(index);
+                nodo.setValue(analisis);
+                index++;
+                //int prueba = nodo.getIndex();
+                LZW.DiccionarioOriginal.put(analisis, nodo);
+                DiccionarioPrueba.put(analisis, nodo);
+                int asdf = DiccionarioPrueba.get(analisis).getIndice();
+                int asdf2 = nodo.getIndice();
+            }
+        }
+        LZW.DiccionarioO = caracteres;
+        //armarDiccionario(texto);
+        //LinkedHashMap<String, NodoDiccionario> Diccionario = LZW.DiccionarioOriginal;
         ArrayList<String> elementos = new ArrayList<>();
         String output = "";
         String input = "";
@@ -22,35 +46,42 @@ public class LZW {
         char[] contenido = texto.toCharArray();
         int tamano = contenido.length;
         int i = 0;
-        int index = LZW.DiccionarioOriginal.size();
+        //int index = LZW.DiccionarioOriginal.size();
+        int index2 = DiccionarioPrueba.size();
         boolean Final = false;
         while(i < tamano) {
             s += contenido[i];
+            NodoDiccionario nodo = new NodoDiccionario();
             //if (Diccionario.containsKey((s += contenido[i+1]) == null)){
             //    s = s.substring(0, s.length()-1);
-            //    elementos.add(Integer.toString(Diccionario.get(s).getIndex()));
+            //    elementos.add(Integer.toString(Diccionario.get(s).getIndice()));
             //}else{
             //    s = s.substring(0, s.length()-1);
             //}
             if (i == tamano - 1){
-                elementos.add(Integer.toString(Diccionario.get(s).getIndex()));
+                //elementos.add(Integer.toString(Diccionario.get(s).getIndice()));
+                elementos.add(Integer.toString(DiccionarioPrueba.get(s).indice));
                 i++;
-            }else if (Diccionario.containsKey(s += contenido[i+1])) {
+            }else if (DiccionarioPrueba.containsKey(s += contenido[i+1])) {
                 i++;
                 s = s.substring(0, s.length()-1);
             } else {
-                elementos.add(Integer.toString(Diccionario.get(s).getIndex()));
-                //s += contenido[i + 1];
-                NodoDiccionario nodo = new NodoDiccionario();
-                nodo.setValue(s);
-                nodo.setIndex(index++);
-                Diccionario.put(s, nodo);
+                s = s.substring(0, s.length()-1);
+                nodo = DiccionarioPrueba.get(s);
+                int prueba = nodo.indice;
+                elementos.add(Integer.toString(DiccionarioPrueba.get(s).indice));
+                s += contenido[i + 1];
+                NodoDiccionario nodoN = new NodoDiccionario();
+                nodoN.setValue(s);
+                index2++;
+                nodoN.setIndex(index2);
+                DiccionarioPrueba.put(s, nodoN);
                 s = "";
                 i++;
             }
 
         }
-        int lon = Integer.toBinaryString(Diccionario.size()).length();
+        int lon = Integer.toBinaryString(DiccionarioPrueba.size()).length();
         LZW.longitudMax = lon;
         for (int x = 0; x < elementos.size(); x++) {
             int cerosExtra = 0;
@@ -134,8 +165,9 @@ public class LZW {
         }
     }
 
-    public static void armarDiccionario(String texto) {
+    public static LinkedHashMap<String, NodoDiccionario>  armarDiccionario(String texto) {
         char[] cadena = texto.toCharArray();
+        LinkedHashMap<String, NodoDiccionario> dicprueba = new LinkedHashMap<>();
         int index = 1;
         String caracteres = "";
         for (int i = 0; i < cadena.length; i++){
@@ -149,18 +181,21 @@ public class LZW {
                 nodo.setIndex(index);
                 nodo.setValue(analisis);
                 index++;
+                //int prueba = nodo.getIndex();
                 LZW.DiccionarioOriginal.put(analisis, nodo);
+                dicprueba.put(analisis, nodo);
             }
         }
         LZW.DiccionarioO = caracteres;
+        return dicprueba;
 
     }
 
-    public static void setDiccionarioOriginal(Map<String, NodoDiccionario> diccionarioOriginal) {
+    public static void setDiccionarioOriginal(LinkedHashMap<String, NodoDiccionario> diccionarioOriginal) {
         DiccionarioOriginal = diccionarioOriginal;
     }
 
-    public static Map<String, NodoDiccionario> getDiccionarioOriginal() {
+    public static LinkedHashMap<String, NodoDiccionario> getDiccionarioOriginal() {
         return DiccionarioOriginal;
     }
 
@@ -171,7 +206,7 @@ public class LZW {
     }
 }
 
-class NodoDiccionario {
+/*class NodoDiccionario {
     public static int index;
     public static String Value;
 
@@ -190,4 +225,4 @@ class NodoDiccionario {
     public static void setValue(String value) {
         Value = value;
     }
-}
+}*/
