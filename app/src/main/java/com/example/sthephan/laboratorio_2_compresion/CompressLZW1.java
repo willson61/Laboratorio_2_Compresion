@@ -73,6 +73,9 @@ public class CompressLZW1 extends AppCompatActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btnBuscar:
+                if(CompressLZW1.file != null){
+                    borrarCampos();
+                }
                 Intent intent = new Intent()
                         .addCategory(Intent.CATEGORY_OPENABLE)
                         .setType("*/*")
@@ -84,6 +87,9 @@ public class CompressLZW1 extends AppCompatActivity {
                 break;
             case R.id.btnComprimir:
                 try{
+                    if(CompressLZW1.diccionario.DiccionarioO != null){
+                        CompressLZW1.diccionario = new LZW();
+                    }
                     String compresion = CompressLZW1.diccionario.Comprimir(readTextFromUri(CompressLZW1.file));
                     CompressLZW1.longitudBinario = CompressLZW1.diccionario.longitudMax;
                     CompressLZWResult.caracteresOriginales = CompressLZW1.diccionario.DiccionarioO;
@@ -98,6 +104,7 @@ public class CompressLZW1 extends AppCompatActivity {
 
                 }catch(Exception e){
                     e.printStackTrace();
+                    borrarCampos();
                 }
                 break;
         }
