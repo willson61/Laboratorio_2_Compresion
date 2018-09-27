@@ -25,17 +25,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         labelManual.setMovementMethod(new ScrollingMovementMethod());
-        labelManual.setText("Este laboratorio tiene 2 opciones de menu. La primera es la compresion de un archivo por el algoritmo de huffman." +
+        labelManual.setText("Este laboratorio tiene 5 opciones de menu. La primera es la compresion de un archivo por el algoritmo de huffman." +
                 "\nEsta primera opcion nos llevara a la ventana de compresion de archivos. En ella tenemos tres opciones: Buscar un archivo para " +
                 "comprimir, cancelar la busqueda hecha para realizar una nueva busqueda y comprimir para iniciar la compresion del archivo." +
                 "\nDespues de haber seleccionado el archivo a comprimir y haberle dado click al boton de comprimir se nos mostrara una ventana con la compresion " +
                 "binaria del archivo que seleccionamos, la codificacion en codigo Ascii del codigo binario y los botones para guardar este archivo de compresion o para borrarlo.\n" +
                 "Si le damos click en guardar se guardara este archivo comprimido .huff en el dispositivo y regresaremos a la ventana de inicio de la aplicacion; y si presionamos" +
                 " el boton de borrar no se guardara este archivo comprimido y se regresara a la ventana de inicio.\n" +
-                "La otra opcion en el menu de inicio es la de descompresion de archivos con extension .huff. Dentro de esta opcion encontraremos las mismas opciones que " +
+                "La segunda opcion en el menu de inicio es la de descompresion de archivos con extension .huff. Dentro de esta opcion encontraremos las mismas opciones que " +
                 "en la opcion de compresion, busqueda, cancular y en este caso descompresion.\nAl ya haber seleccionado un archivo y haberle dado click en descomprimir" +
                 " se nos presentara una ventana con el texto descomprimido del archivo que seleccionamos anteriormente. En esta ventana tambien tenemos las mismas opciones de borrar y guardar" +
-                " el archivo que se acaba de descomprimir. Con esto concluye el manual de usuario.\n Nota: En los procesos de compresion y descompresion es normal" +
+                " el archivo que se acaba de descomprimir. De ahí se encuentran las opciones de compresion y descompresion con el algoritmo LZW, " +
+                "la funcionalidad de la aplicacion es la misma que cuando se selecciona el algoritmo huffma. \n La ultima opción es la del historial de compresiones que mostrará " +
+                "todas las compresiones que se han realizado con la aplicacion."
+                + "Con esto concluye el manual de usuario.\n Nota: En los procesos de compresion y descompresion es normal" +
                 " que la aplicacion no reaccione por unos minuntos, esto se debe a la cantidad de datos que el programa esta comprimiendo o descomprimiendo.\nAutores:\n" +
                 "Williams Monterroso Contreras #1021417\nJose Fuentes Araujo #1168315");
     }
