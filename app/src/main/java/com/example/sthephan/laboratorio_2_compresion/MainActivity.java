@@ -19,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.labelManual)
     TextView labelManual;
 
+    public static String ext;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

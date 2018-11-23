@@ -3,8 +3,10 @@ package com.example.sthephan.laboratorio_2_compresion;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.OpenableColumns;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -25,6 +28,7 @@ import butterknife.OnClick;
 public class DecompressLZW1 extends AppCompatActivity {
 
     private static Charset UTF8 = Charset.forName("UTF-8");
+    private static Charset ISO = Charset.forName("ISO-8859-1");
     public static Uri file;
     public static LZW diccionario = new LZW();
     public static int longitudBinario;
@@ -59,16 +63,32 @@ public class DecompressLZW1 extends AppCompatActivity {
 
     private String readTextFromUri(Uri uri) throws IOException {
         InputStream input = getContentResolver().openInputStream(uri);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(input, UTF8));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(input));
         StringBuilder stringbuilder = new StringBuilder();
         int line = 0;
+        byte[] inputData = getBytes(input);
+        String text = new String(inputData, ISO);
+        return text;
+        /*
         while ((line = reader.read()) != -1) {
-            char val = (char) line;
+            Character val = (char) line;
             stringbuilder.append(val);
         }
         input.close();
         reader.close();
-        return stringbuilder.toString();
+        return text;*/
+    }
+
+    public byte[] getBytes(InputStream inputStream) throws IOException {
+        ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
+        int bufferSize = 1024;
+        byte[] buffer = new byte[bufferSize];
+
+        int len = 0;
+        while ((len = inputStream.read(buffer)) != -1) {
+            byteBuffer.write(buffer, 0, len);
+        }
+        return byteBuffer.toByteArray();
     }
 
     @OnClick({R.id.btnBuscar, R.id.btnCancelar, R.id.btnDescomprimir})
@@ -95,8 +115,8 @@ public class DecompressLZW1 extends AppCompatActivity {
                             DecompressLZW1.longitudBinario = Integer.parseInt(ascii[3]);
                             String texto = DecompressLZW1.diccionario.Descomprimir(extraerNumDeBinario(extraerBinarioDeAscii(ascii[1]).substring(Integer.parseInt(ascii[2]))), ascii[0], ascii[2]);
                             DecompressLZWResult.textoDescompresion = texto;
-                            String[] pr = DecompressLZW1.file.getPath().split("/");
-                            DecompressLZWResult.nombreArchivo = pr[pr.length - 1].replace(".lzw", "");
+                            String pr = obtenerNombreDeArchivoDeUri(DecompressLZW1.file);
+                            DecompressLZWResult.nombreArchivo = pr.replace(".lzw", "");
                             DecompressLZW1.diccionario = new LZW();
                             DecompressLZW1.file = null;
                             finish();
@@ -121,11 +141,11 @@ public class DecompressLZW1 extends AppCompatActivity {
         if (requestCode == 123 && resultCode == RESULT_OK) {
             try{
                 Uri selectedFile = data.getData();
-                String[] prueba = selectedFile.getPath().split("/");
-                if(prueba[prueba.length - 1].contains(".lzw")){
+                String prueba = obtenerNombreDeArchivoDeUri(selectedFile);
+                if(prueba.contains(".lzw")){
                     Toast message = Toast.makeText(getApplicationContext(), "Archivo seleccionado exitosamente", Toast.LENGTH_LONG);
                     message.show();
-                    labelNombre.setText(prueba[prueba.length - 1]);
+                    labelNombre.setText(prueba);
                     labelContenido.setText(readTextFromUri(selectedFile));
                     DecompressLZW1.file = selectedFile;
                 }
@@ -143,6 +163,24 @@ public class DecompressLZW1 extends AppCompatActivity {
             Toast message = Toast.makeText(getApplicationContext(), "Por favor seleccione un archivo para continuar con la compresion", Toast.LENGTH_LONG);
             message.show();
         }
+    }
+
+    public String obtenerNombreDeArchivoDeUri(Uri uri) {
+        String displayName = "";
+        Cursor cursor = getApplicationContext().getContentResolver().query(uri, null, null, null, null, null);
+        try {
+            // moveToFirst() returns false if the cursor has 0 rows.  Very handy for
+            // "if there's anything to look at, look at it" conditionals.
+            if (cursor != null && cursor.moveToFirst()) {
+
+                // Note it's called "Display Name".  This is
+                // provider-specific, and might not necessarily be the file name.
+                displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+            }
+        } finally {
+            cursor.close();
+        }
+        return displayName;
     }
 
     public String extraerBinarioDeAscii(String codigoAscii){

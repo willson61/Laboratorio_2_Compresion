@@ -3,8 +3,10 @@ package com.example.sthephan.laboratorio_2_compresion;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.OpenableColumns;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
@@ -12,9 +14,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,10 +32,13 @@ public class CompressLZW1 extends AppCompatActivity {
     @BindView(R.id.labelContenido)
     TextView labelContenido;
 
+    private static Charset UTF8 = Charset.forName("UTF-8");
+    private static Charset ISO = Charset.forName("ISO-8859-1");
     public static LZW diccionario = new LZW();
     public static Uri file;
     public static int cerosExtra;
     public static int longitudBinario;
+    public static String ext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,14 +67,37 @@ public class CompressLZW1 extends AppCompatActivity {
         InputStream input = getContentResolver().openInputStream(uri);
         BufferedReader reader = new BufferedReader(new InputStreamReader(input));
         StringBuilder stringbuilder = new StringBuilder();
+        byte[] inputData = getBytes(input);
         int line = 0;
+        String text = new String(inputData, ISO);
+        return text;
+        /*line = input.read();
         while ((line = reader.read()) != -1) {
-            char val = (char) line;
+            Character val = (char) line;
             stringbuilder.append(val);
         }
         input.close();
-        reader.close();
-        return stringbuilder.toString();
+        reader.close();*/
+    }
+
+    public static byte[] getBytes(InputStream is) throws IOException {
+
+        int len;
+        int size = 1024;
+        byte[] buf;
+
+        if (is instanceof ByteArrayInputStream) {
+            size = is.available();
+            buf = new byte[size];
+            len = is.read(buf, 0, size);
+        } else {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            buf = new byte[size];
+            while ((len = is.read(buf, 0, size)) != -1)
+                bos.write(buf, 0, len);
+            buf = bos.toByteArray();
+        }
+        return buf;
     }
 
     @OnClick({R.id.btnBuscar, R.id.btnCancelar, R.id.btnComprimir})
@@ -116,19 +147,16 @@ public class CompressLZW1 extends AppCompatActivity {
         if (requestCode == 123 && resultCode == RESULT_OK) {
             try{
                 Uri selectedFile = data.getData();
-                String[] prueba = selectedFile.getPath().split("/");
-                if(prueba[prueba.length - 1].contains(".txt")){
-                    Toast message = Toast.makeText(getApplicationContext(), "Archivo seleccionado exitosamente", Toast.LENGTH_LONG);
-                    message.show();
-                    labelNombre.setText(prueba[prueba.length - 1]);
-                    labelContenido.setText(readTextFromUri(selectedFile));
-                    CompressLZW1.file = selectedFile;
-                }
-                else{
-                    borrarCampos();
-                    Toast message = Toast.makeText(getApplicationContext(), "El archivo seleccionado no posee la extension .txt para compresion. Por favor seleccione un archivo de extension .txt", Toast.LENGTH_LONG);
-                    message.show();
-                }
+                String prueba = obtenerNombreDeArchivoDeUri(selectedFile);
+                String[] ext = prueba.split("\\.");
+                CompressLZW1.ext = ext[1];
+                MainActivity.ext = ext[1];
+                CompressLZWResult.ext = ext[1];
+                Toast message = Toast.makeText(getApplicationContext(), "Archivo seleccionado exitosamente", Toast.LENGTH_LONG);
+                message.show();
+                labelNombre.setText(prueba);
+                labelContenido.setText(readTextFromUri(selectedFile));
+                CompressLZW1.file = selectedFile;
             }catch(Exception e){
                 e.printStackTrace();
             }
@@ -173,5 +201,23 @@ public class CompressLZW1 extends AppCompatActivity {
             }
         }
         return txtAscii;
+    }
+
+    public String obtenerNombreDeArchivoDeUri(Uri uri) {
+        String displayName = "";
+        Cursor cursor = getApplicationContext().getContentResolver().query(uri, null, null, null, null, null);
+        try {
+            // moveToFirst() returns false if the cursor has 0 rows.  Very handy for
+            // "if there's anything to look at, look at it" conditionals.
+            if (cursor != null && cursor.moveToFirst()) {
+
+                // Note it's called "Display Name".  This is
+                // provider-specific, and might not necessarily be the file name.
+                displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+            }
+        } finally {
+            cursor.close();
+        }
+        return displayName;
     }
 }

@@ -36,6 +36,7 @@ public class CompressLZWResult extends AppCompatActivity {
     TextView labelLZW;
 
     private static Charset UTF8 = Charset.forName("UTF-8");
+    private static Charset ISO = Charset.forName("ISO-8859-1");
     public static String codigoLZW;
     public static String textAscii;
     public static String caracteresOriginales;
@@ -43,6 +44,7 @@ public class CompressLZWResult extends AppCompatActivity {
     public static Uri file2;
     public static int cerosExtra;
     public static int longitudBinario;
+    public static String ext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +55,8 @@ public class CompressLZWResult extends AppCompatActivity {
         labelLZW.setMovementMethod(new ScrollingMovementMethod());
         labelLZW.setText(CompressLZWResult.codigoLZW);
         labelContenido.setText(CompressLZWResult.textAscii);
-        String[] prueba = CompressLZWResult.file1.getPath().split("/");
-        labelNombre.setText(prueba[prueba.length - 1].replace(".txt", ".lzw"));
+        String prueba = obtenerNombreDeArchivoDeUri(CompressLZWResult.file1);
+        labelNombre.setText(prueba.replace(CompressLZWResult.ext, "lzw"));
         
     }
 
@@ -102,7 +104,7 @@ public class CompressLZWResult extends AppCompatActivity {
                 CompressLZWResult.file2 = selectedFile;
                 ParcelFileDescriptor file = this.getContentResolver().openFileDescriptor(selectedFile, "w");
                 FileOutputStream fos = new FileOutputStream(file.getFileDescriptor());
-                Writer wr = new OutputStreamWriter(fos, UTF8);
+                Writer wr = new OutputStreamWriter(fos, ISO);
                 String textContent = createTextForFile();
                 wr.write(textContent);
                 wr.flush();
@@ -154,8 +156,8 @@ public class CompressLZWResult extends AppCompatActivity {
     }
 
     public Compress crearCompression(){
-        String[] path = CompressLZWResult.file1.getPath().split("/");
-        String[] path2 = CompressLZWResult.file2.getPath().split("/");
+        String name1 = obtenerNombreDeArchivoDeUri(CompressLZWResult.file1);
+        String name2 = obtenerNombreDeArchivoDeUri(CompressLZWResult.file2);
         Long file1Size;
         Long file2Size;
         Cursor returnCursor1 = getContentResolver().query(CompressLZWResult.file1, null, null, null, null);
@@ -168,7 +170,7 @@ public class CompressLZWResult extends AppCompatActivity {
         file2Size = returnCursor2.getLong(sizeIndex2);
         Float raz = (float) file2Size/file1Size;
         Float fac = (float) file1Size/file2Size;
-        Compress c = new Compress(path[path.length - 1], path2[path2.length - 1], CompressLZWResult.file2.getPath(), (raz * 100), fac, ((1 - raz) * 100), "LZW");
+        Compress c = new Compress(name1, name2, CompressLZWResult.file2.getPath(), (raz * 100), fac, ((1 - raz) * 100), "LZW");
         return c;
     }
 
@@ -204,6 +206,24 @@ public class CompressLZWResult extends AppCompatActivity {
         }catch(Exception e){
             e.printStackTrace();
         }
+    }
+
+    public String obtenerNombreDeArchivoDeUri(Uri uri) {
+        String displayName = "";
+        Cursor cursor = getApplicationContext().getContentResolver().query(uri, null, null, null, null, null);
+        try {
+            // moveToFirst() returns false if the cursor has 0 rows.  Very handy for
+            // "if there's anything to look at, look at it" conditionals.
+            if (cursor != null && cursor.moveToFirst()) {
+
+                // Note it's called "Display Name".  This is
+                // provider-specific, and might not necessarily be the file name.
+                displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+            }
+        } finally {
+            cursor.close();
+        }
+        return displayName;
     }
     
     public void borrarTodo(){

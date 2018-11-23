@@ -29,6 +29,7 @@ public class DecompressLZWResult extends AppCompatActivity {
     public static String nombreArchivo;
     public static Uri file;
     private static Charset UTF8 = Charset.forName("UTF-8");
+    private static Charset ISO = Charset.forName("ISO-8859-1");
     
     @BindView(R.id.labelNombre)
     TextView labelNombre;
@@ -67,7 +68,7 @@ public class DecompressLZWResult extends AppCompatActivity {
                 Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
                 intent.setType("*/*");
-                intent.putExtra(Intent.EXTRA_TITLE, DecompressLZWResult.nombreArchivo.concat("Descomprimido.txt"));
+                intent.putExtra(Intent.EXTRA_TITLE, DecompressLZWResult.nombreArchivo.concat("." + MainActivity.ext));
                 startActivityForResult(intent, 12345);
                 break;
             case R.id.btnBorrar:
@@ -88,7 +89,7 @@ public class DecompressLZWResult extends AppCompatActivity {
                 DecompressLZWResult.file = selectedFile;
                 ParcelFileDescriptor file = this.getContentResolver().openFileDescriptor(selectedFile, "w");
                 FileOutputStream fos = new FileOutputStream(file.getFileDescriptor());
-                Writer wr = new OutputStreamWriter(fos, UTF8);
+                Writer wr = new OutputStreamWriter(fos, ISO);
                 String textContent = DecompressLZWResult.textoDescompresion;
                 wr.write(textContent);
                 wr.flush();
