@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
+import android.provider.OpenableColumns;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
@@ -80,10 +81,29 @@ public class DecompressLZWResult extends AppCompatActivity {
         }
     }
 
+    public String obtenerNombreDeArchivoDeUri(Uri uri) {
+        String displayName = "";
+        Cursor cursor = getApplicationContext().getContentResolver().query(uri, null, null, null, null, null);
+        try {
+            // moveToFirst() returns false if the cursor has 0 rows.  Very handy for
+            // "if there's anything to look at, look at it" conditionals.
+            if (cursor != null && cursor.moveToFirst()) {
+
+                // Note it's called "Display Name".  This is
+                // provider-specific, and might not necessarily be the file name.
+                displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+            }
+        } finally {
+            cursor.close();
+        }
+        return displayName;
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 12345 && resultCode == RESULT_OK && data.getData().getPath().contains(".txt")) {
+        String name = obtenerNombreDeArchivoDeUri(data.getData());
+        if (requestCode == 12345 && resultCode == RESULT_OK) {
             try{
                 Uri selectedFile = data.getData();
                 DecompressLZWResult.file = selectedFile;
@@ -103,7 +123,7 @@ public class DecompressLZWResult extends AppCompatActivity {
             Toast message = Toast.makeText(getApplicationContext(), "Por favor seleccione un archivo para continuar con la compresion", Toast.LENGTH_LONG);
             message.show();
         }
-        else if (!data.getData().getPath().contains(".lzw")){
+        else if (!name.contains(MainActivity.ext)){
             Toast message = Toast.makeText(getApplicationContext(), "Por favor utilice la extension .txt para guardar el archivo comprimido", Toast.LENGTH_LONG);
             message.show();
         }
